@@ -1,0 +1,14 @@
+services:
+  postgres:
+    container_name: movie-postgres-db
+    image: postgres:latest
+    hostname: localhost
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: node-postgres-demo
+    volumes:
+      - ./db-init/:/docker-entrypoint-initdb.d/
+      - ./pg-data:/var/lib/postgresql/data

@@ -1,0 +1,769 @@
+{
+	"info": {
+		"_postman_id": "52b8a981-015f-4c9b-85b9-dd9f1bd82d42",
+		"name": "MRS-Node",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19966914"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"test\",\n    \"email\": \"test@gmail.com\",\n    \"password\": \"qwerty\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}auth/register",
+							"host": [
+								"{{baseURL}}auth"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "users",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\":\"test\",\n    \"email\": \"test@gmail.com\",\n    \"password\": \"qwerty\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/auth/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "Authentication=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEsImlhdCI6MTczMDI5NTQ0OCwiZXhwIjoxNzMwMjk5MDQ4fQ.IVH1RX7_fYFQvxtGkbYhs7nxG5ZFjn-_40A_JzOUh_U; Max-Age=18000; Path=/; Expires=Wed, 30 Oct 2024 18:37:28 GMT; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "91"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"5b-9m4obOFBnxMEDOO4Wf6HzWsq85I\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 30 Oct 2024 13:37:28 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"username\": \"test\",\n    \"email\": \"test@gmail.com\",\n    \"created_at\": \"2024-10-30T13:37:28.685Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"password\": \"qwerty\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}auth/login",
+							"host": [
+								"{{baseURL}}auth"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"password\": \"qwerty\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/auth/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "Authentication=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEsImlhdCI6MTczMDI5NTY3MywiZXhwIjoxNzMwMjk5MjczfQ.NA-m_5CpMVX0T3gWAtmssLMsVyqxJfshY5wtacnuLfc; Max-Age=18000; Path=/; Expires=Wed, 30 Oct 2024 18:41:13 GMT; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "91"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"5b-9m4obOFBnxMEDOO4Wf6HzWsq85I\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 30 Oct 2024 13:41:13 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"username\": \"test\",\n    \"email\": \"test@gmail.com\",\n    \"created_at\": \"2024-10-30T13:37:28.685Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"password\": \"qwerty\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}auth/logout",
+							"host": [
+								"{{baseURL}}auth"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "logout",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"password\": \"qwerty\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/auth/logout",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "Authentication=; Max-Age=0; Path=/; HttpOnly"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 30 Oct 2024 13:42:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "me",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}auth/me",
+							"host": [
+								"{{baseURL}}auth"
+							],
+							"path": [
+								"me"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "me",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/auth/me",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"me"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "165"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"a5-4Lit4fKZGIZShk8/POzUNvk0Isg\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 30 Oct 2024 13:42:03 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"username\": \"test\",\n    \"email\": \"test@gmail.com\",\n    \"password\": \"$2b$10$afeBZIHKV0G0yoXwGSc26e7q/Pk1QEvVPrW0JBmPjQFaJ8lvr0qTu\",\n    \"created_at\": \"2024-10-30T13:37:28.685Z\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "movies",
+			"item": [
+				{
+					"name": "all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}movies/all?yearAfter=2014&genre=Comedy",
+							"host": [
+								"{{baseURL}}movies"
+							],
+							"path": [
+								"all"
+							],
+							"query": [
+								{
+									"key": "yearAfter",
+									"value": "2014"
+								},
+								{
+									"key": "genre",
+									"value": "Comedy"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "all",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}movies/all?yearAfter=2014&genre=Comedy",
+									"host": [
+										"{{baseURL}}movies"
+									],
+									"path": [
+										"all"
+									],
+									"query": [
+										{
+											"key": "yearAfter",
+											"value": "2014"
+										},
+										{
+											"key": "genre",
+											"value": "Comedy"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3001"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "11767"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2df7-5hZJQCwvo0UV2pX52yF6WVeqB+8\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 01 Nov 2024 14:09:18 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"movies\": [\n        {\n            \"id\": 2637276,\n            \"title\": \"Ted 2\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Comedy\",\n            \"director\": \"Seth MacFarlane\",\n            \"minutes\": 115,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMjEwMDg3MDk1NF5BMl5BanBnXkFtZTgwNjYyODA1NTE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 3248600,\n            \"title\": \"The Squeeze\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Comedy, Drama, Sport\",\n            \"director\": \"Terry Jastrow\",\n            \"minutes\": 95,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTYyNjMwNjM2Ml5BMl5BanBnXkFtZTgwNTMyMDA5NDE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 4142022,\n            \"title\": \"Italiano medio\",\n            \"year\": 2015,\n            \"country\": \"Italy\",\n            \"genre\": \"Comedy\",\n            \"director\": \"Marcello Macchia\",\n            \"minutes\": 90,\n            \"poster\": \"N/A\"\n        },\n        {\n            \"id\": 1243974,\n            \"title\": \"Aloha\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Comedy, Drama, Romance\",\n            \"director\": \"Cameron Crowe\",\n            \"minutes\": 105,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTg4Mjc0NTE1NV5BMl5BanBnXkFtZTgwNzcwNTQ3NTE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 2561572,\n            \"title\": \"Get Hard\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Comedy, Crime\",\n            \"director\": \"Etan Cohen\",\n            \"minutes\": 100,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTc3OTc1NjM0M15BMl5BanBnXkFtZTgwNjAyMzE1MzE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 1674771,\n            \"title\": \"Entourage\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Comedy\",\n            \"director\": \"Doug Ellin\",\n            \"minutes\": 104,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTQ3NjYxMDE1OV5BMl5BanBnXkFtZTgwMjgzOTE4MzE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 2582496,\n            \"title\": \"Me and Earl and the Dying Girl\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Comedy, Drama\",\n            \"director\": \"Alfonso Gomez-Rejon\",\n            \"minutes\": 105,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BNTA1NzUzNjY4MV5BMl5BanBnXkFtZTgwNDU0MDI0NTE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 3705388,\n            \"title\": \"An Italian Name\",\n            \"year\": 2015,\n            \"country\": \"Italy\",\n            \"genre\": \"Comedy\",\n            \"director\": \"Francesca Archibugi\",\n            \"minutes\": 94,\n            \"poster\": \"N/A\"\n        },\n        {\n            \"id\": 1810683,\n            \"title\": \"Little Boy\",\n            \"year\": 2015,\n            \"country\": \"USA, Mexico\",\n            \"genre\": \"Comedy, Drama, War\",\n            \"director\": \"Alejandro Monteverde\",\n            \"minutes\": 106,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTU5MjMyODcxMF5BMl5BanBnXkFtZTgwMzIwMDM2NDE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 3316948,\n            \"title\": \"American Ultra\",\n            \"year\": 2015,\n            \"country\": \"USA, Switzerland\",\n            \"genre\": \"Action, Comedy\",\n            \"director\": \"Nima Nourizadeh\",\n            \"minutes\": 96,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTcwMTM1NDU1Ml5BMl5BanBnXkFtZTgwNDk5MTgzNjE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 3680410,\n            \"title\": \"Last Cab to Darwin\",\n            \"year\": 2015,\n            \"country\": \"Australia\",\n            \"genre\": \"Comedy, Drama, Romance\",\n            \"director\": \"Jeremy Sims\",\n            \"minutes\": 123,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTcyMzE0MjU0N15BMl5BanBnXkFtZTgwNzYxNjU3NjE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 2293640,\n            \"title\": \"Minions\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Animation, Comedy, Family\",\n            \"director\": \"Kyle Balda, Pierre Coffin\",\n            \"minutes\": 91,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTg2MTMyMzU0M15BMl5BanBnXkFtZTgwOTU3ODk4NTE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 3495030,\n            \"title\": \"Dum Laga Ke Haisha\",\n            \"year\": 2015,\n            \"country\": \"India\",\n            \"genre\": \"Comedy, Drama, Romance\",\n            \"director\": \"Sharat Katariya\",\n            \"minutes\": 110,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTg2Njg1OTg4OV5BMl5BanBnXkFtZTgwMjczNzM2NDE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 2096673,\n            \"title\": \"Inside Out\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Animation, Adventure, Comedy\",\n            \"director\": \"Pete Docter, Ronnie Del Carmen\",\n            \"minutes\": 95,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BOTgxMDQwMDk0OF5BMl5BanBnXkFtZTgwNjU5OTg2NDE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 3079380,\n            \"title\": \"Spy\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Action, Comedy, Crime\",\n            \"director\": \"Paul Feig\",\n            \"minutes\": 119,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BNjI5OTQ0MDQxM15BMl5BanBnXkFtZTgwMzcwNjMyNTE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 3450650,\n            \"title\": \"Paul Blart: Mall Cop 2\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Action, Comedy, Crime\",\n            \"director\": \"Andy Fickman\",\n            \"minutes\": 94,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTkwMjkxNDQ1MV5BMl5BanBnXkFtZTgwNDQwODIxNTE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 3472226,\n            \"title\": \"Kung Fury\",\n            \"year\": 2015,\n            \"country\": \"Sweden\",\n            \"genre\": \"Short, Action, Comedy\",\n            \"director\": \"David Sandberg\",\n            \"minutes\": 31,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMjQwMjU2ODU5NF5BMl5BanBnXkFtZTgwNTU1NjM4NTE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 2120120,\n            \"title\": \"Pixels\",\n            \"year\": 2015,\n            \"country\": \"USA, China, Canada\",\n            \"genre\": \"Action, Comedy, Sci-Fi\",\n            \"director\": \"Chris Columbus\",\n            \"minutes\": 106,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTYxMzM4NDY5N15BMl5BanBnXkFtZTgwNzg1NTI3MzE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 4712818,\n            \"title\": \"Ali Kundilli\",\n            \"year\": 2015,\n            \"country\": \"Turkey\",\n            \"genre\": \"Comedy\",\n            \"director\": \"Bülent Isbilen\",\n            \"minutes\": 0,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTU2NzQxMzc4M15BMl5BanBnXkFtZTgwMjY1MDEyNjE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 1638355,\n            \"title\": \"The Man from U.N.C.L.E.\",\n            \"year\": 2015,\n            \"country\": \"USA, UK\",\n            \"genre\": \"Action, Adventure, Comedy\",\n            \"director\": \"Guy Ritchie\",\n            \"minutes\": 116,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTc2NjQ4ODYyNF5BMl5BanBnXkFtZTgwODA3OTU5NTE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 1666801,\n            \"title\": \"The DUFF\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Comedy\",\n            \"director\": \"Ari Sandel\",\n            \"minutes\": 101,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTc3OTg3MDUwN15BMl5BanBnXkFtZTgwMTAwMTkxNDE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 2191765,\n            \"title\": \"One Wild Moment\",\n            \"year\": 2015,\n            \"country\": \"France, Belgium\",\n            \"genre\": \"Comedy, Drama, Romance\",\n            \"director\": \"Jean-François Richet\",\n            \"minutes\": 105,\n            \"poster\": \"N/A\"\n        },\n        {\n            \"id\": 3863552,\n            \"title\": \"Bajrangi Bhaijaan\",\n            \"year\": 2015,\n            \"country\": \"India\",\n            \"genre\": \"Comedy, Drama\",\n            \"director\": \"Kabir Khan\",\n            \"minutes\": 163,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMjE1NjQ5ODc2NV5BMl5BanBnXkFtZTgwOTM5ODIxNjE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 2224026,\n            \"title\": \"Home\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Animation, Adventure, Comedy\",\n            \"director\": \"Tim Johnson\",\n            \"minutes\": 94,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTU0MzU4ODI3Ml5BMl5BanBnXkFtZTgwMzQzODk5NDE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 4192740,\n            \"title\": \"Limonata\",\n            \"year\": 2015,\n            \"country\": \"Turkey\",\n            \"genre\": \"Comedy, Drama\",\n            \"director\": \"Ali Atay\",\n            \"minutes\": 0,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BNjQzNTIzMTM4Nl5BMl5BanBnXkFtZTgwNjUwOTA4NDE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 3411432,\n            \"title\": \"All Creatures Big and Small\",\n            \"year\": 2015,\n            \"country\": \"Germany, Belgium, Luxembourg, Ireland\",\n            \"genre\": \"Animation, Adventure, Comedy\",\n            \"director\": \"Toby Genkel, Sean McCormack\",\n            \"minutes\": 87,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTczMDUzNzgxMF5BMl5BanBnXkFtZTgwNzcyMTk2NjE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 2361509,\n            \"title\": \"The Intern\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Comedy\",\n            \"director\": \"Nancy Meyers\",\n            \"minutes\": 121,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTUyNjE5NjI5OF5BMl5BanBnXkFtZTgwNzYzMzU3NjE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 2358925,\n            \"title\": \"Unfinished Business\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Comedy\",\n            \"director\": \"Ken Scott\",\n            \"minutes\": 91,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BNjg5NzU5ODE5OV5BMl5BanBnXkFtZTgwMjM1MjE2NDE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 3530002,\n            \"title\": \"The Night Before\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Comedy\",\n            \"director\": \"Jonathan Levine\",\n            \"minutes\": 101,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTkyNDY1ODQwNV5BMl5BanBnXkFtZTgwNzA2MjUwNzE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 3152624,\n            \"title\": \"Trainwreck\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Comedy, Romance\",\n            \"director\": \"Judd Apatow\",\n            \"minutes\": 125,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTQ4MjgwNTMyOV5BMl5BanBnXkFtZTgwMTc1MjI0NDE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 2381941,\n            \"title\": \"Focus\",\n            \"year\": 2015,\n            \"country\": \"USA, Argentina\",\n            \"genre\": \"Comedy, Crime, Drama\",\n            \"director\": \"Glenn Ficarra, John Requa\",\n            \"minutes\": 105,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTUwODg2OTA4OF5BMl5BanBnXkFtZTgwOTE5MTE4MzE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 3045616,\n            \"title\": \"Mortdecai\",\n            \"year\": 2015,\n            \"country\": \"UK, USA\",\n            \"genre\": \"Action, Comedy, Mystery\",\n            \"director\": \"David Koepp\",\n            \"minutes\": 107,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMjM3NDcxOTM5Ml5BMl5BanBnXkFtZTgwNTEwNzE0MzE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 4450706,\n            \"title\": \"Husband Factor\",\n            \"year\": 2015,\n            \"country\": \"Turkey\",\n            \"genre\": \"Comedy, Drama, Romance\",\n            \"director\": \"Kivanc Baruonu\",\n            \"minutes\": 108,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTY2NDk0MDc3Nl5BMl5BanBnXkFtZTgwMjIyMTQ3NDE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 3110770,\n            \"title\": \"Road Hard\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Comedy\",\n            \"director\": \"Adam Carolla, Kevin Hench\",\n            \"minutes\": 98,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMjI5MjA3MzIxMV5BMl5BanBnXkFtZTgwMDA5NjY2NDE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 4974684,\n            \"title\": \"Kara Bela\",\n            \"year\": 2015,\n            \"country\": \"Turkey\",\n            \"genre\": \"Adventure, Comedy\",\n            \"director\": \"Burak Aksak\",\n            \"minutes\": 105,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTU0NDYyMDc4NV5BMl5BanBnXkFtZTgwNzE5ODA3NjE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 2555736,\n            \"title\": \"The Second Best Exotic Marigold Hotel\",\n            \"year\": 2015,\n            \"country\": \"UK, USA\",\n            \"genre\": \"Comedy, Drama\",\n            \"director\": \"John Madden\",\n            \"minutes\": 122,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTU3MjkxNjc0OV5BMl5BanBnXkFtZTgwMjc0NDg0NDE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 4208868,\n            \"title\": \"Ja, Ik Wil!\",\n            \"year\": 2015,\n            \"country\": \"Netherlands\",\n            \"genre\": \"Comedy, Romance\",\n            \"director\": \"Kees van Nieuwkerk\",\n            \"minutes\": 0,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTQ4NzQ2NDUzNV5BMl5BanBnXkFtZTgwMTM5MjU5NjE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 3809308,\n            \"title\": \"Noi e la Giulia\",\n            \"year\": 2015,\n            \"country\": \"Italy\",\n            \"genre\": \"Comedy\",\n            \"director\": \"Edoardo Leo\",\n            \"minutes\": 115,\n            \"poster\": \"N/A\"\n        },\n        {\n            \"id\": 1727770,\n            \"title\": \"Absolutely Anything\",\n            \"year\": 2015,\n            \"country\": \"UK, USA\",\n            \"genre\": \"Comedy, Sci-Fi\",\n            \"director\": \"Terry Jones\",\n            \"minutes\": 85,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMjMxNTQ1NDgyOF5BMl5BanBnXkFtZTgwMjMxNjU0NjE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 884732,\n            \"title\": \"The Wedding Ringer\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Comedy\",\n            \"director\": \"Jeremy Garelick\",\n            \"minutes\": 101,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTk3MjQyNTUxNl5BMl5BanBnXkFtZTgwNjM3Mjk1MzE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 1524930,\n            \"title\": \"Vacation\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Adventure, Comedy\",\n            \"director\": \"John Francis Daley, Jonathan M. Goldstein\",\n            \"minutes\": 99,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTUwNTM0ODMxM15BMl5BanBnXkFtZTgwNjM4Nzk4NTE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 2974050,\n            \"title\": \"Cool Cat Saves the Kids\",\n            \"year\": 2015,\n            \"country\": \"USA, Mexico\",\n            \"genre\": \"Comedy, Drama, Family\",\n            \"director\": \"Derek Savage\",\n            \"minutes\": 75,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BNzE1OTY3OTk5M15BMl5BanBnXkFtZTgwODE0Mjc1NDE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 5112966,\n            \"title\": \"Bez granits\",\n            \"year\": 2015,\n            \"country\": \"Russia\",\n            \"genre\": \"Comedy\",\n            \"director\": \"Rezo Gigineishvili, Karen Oganesyan, Roman Prygunov\",\n            \"minutes\": 90,\n            \"poster\": \"N/A\"\n        },\n        {\n            \"id\": 2967224,\n            \"title\": \"Hot Pursuit\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Action, Comedy, Crime\",\n            \"director\": \"Anne Fletcher\",\n            \"minutes\": 87,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BNzc0MDk0NDMwM15BMl5BanBnXkFtZTgwNTIzMjE1NTE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 2503944,\n            \"title\": \"Burnt\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Comedy, Drama\",\n            \"director\": \"John Wells\",\n            \"minutes\": 101,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BNjEzNTk2OTEwNF5BMl5BanBnXkFtZTgwNzExMTg0NjE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 1051904,\n            \"title\": \"Goosebumps\",\n            \"year\": 2015,\n            \"country\": \"USA, Australia\",\n            \"genre\": \"Adventure, Comedy, Fantasy\",\n            \"director\": \"Rob Letterman\",\n            \"minutes\": 103,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMjA1OTUzNTQ5Ml5BMl5BanBnXkFtZTgwODQ4NDkxNjE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 2848292,\n            \"title\": \"Pitch Perfect 2\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Comedy, Music\",\n            \"director\": \"Elizabeth Banks\",\n            \"minutes\": 115,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTk0Mzg4NDYyOF5BMl5BanBnXkFtZTgwOTM2ODg2NTE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 2279373,\n            \"title\": \"The SpongeBob Movie: Sponge Out of Water\",\n            \"year\": 2015,\n            \"country\": \"USA\",\n            \"genre\": \"Animation, Adventure, Comedy\",\n            \"director\": \"Paul Tibbitt, Mike Mitchell\",\n            \"minutes\": 92,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMjYyNDczNTE0MF5BMl5BanBnXkFtZTgwNjkzNDYxMzE@._V1_SX300.jpg\"\n        },\n        {\n            \"id\": 3767372,\n            \"title\": \"Piku\",\n            \"year\": 2015,\n            \"country\": \"India\",\n            \"genre\": \"Comedy, Drama\",\n            \"director\": \"Shoojit Sircar\",\n            \"minutes\": 123,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTUwOTMxNjc2OV5BMl5BanBnXkFtZTgwODQ4OTMxNTE@._V1_SX300.jpg\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "average",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}movies/average?minimalRatings=50&genre=Crime",
+							"host": [
+								"{{baseURL}}movies"
+							],
+							"path": [
+								"average"
+							],
+							"query": [
+								{
+									"key": "minimalRatings",
+									"value": "50"
+								},
+								{
+									"key": "genre",
+									"value": "Crime"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "average",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}movies/average?minimalRatings=50&genre=Crime",
+									"host": [
+										"{{baseURL}}movies"
+									],
+									"path": [
+										"average"
+									],
+									"query": [
+										{
+											"key": "minimalRatings",
+											"value": "50"
+										},
+										{
+											"key": "genre",
+											"value": "Crime"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3001"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "572"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"23c-dHGUY7HGTRLM4FbWkaIxeW3Ym8o\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 01 Nov 2024 14:09:22 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"movies\": [\n        {\n            \"id\": 1670345,\n            \"title\": \"Now You See Me\",\n            \"year\": 2013,\n            \"country\": \"France, USA\",\n            \"genre\": \"Crime, Mystery, Thriller\",\n            \"director\": \"Louis Leterrier\",\n            \"minutes\": 115,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTY0NDY3MDMxN15BMl5BanBnXkFtZTcwOTM5NzMzOQ@@._V1_SX300.jpg\",\n            \"rating\": 7.711864406779661\n        },\n        {\n            \"id\": 2267998,\n            \"title\": \"Gone Girl\",\n            \"year\": 2014,\n            \"country\": \"USA\",\n            \"genre\": \"Crime, Drama, Mystery\",\n            \"director\": \"David Fincher\",\n            \"minutes\": 149,\n            \"poster\": \"http://ia.media-imdb.com/images/M/MV5BMTk0MDQ3MzAzOV5BMl5BanBnXkFtZTgwNzU1NzE3MjE@._V1_SX300.jpg\",\n            \"rating\": 8.529411764705882\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "similar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}movies/similar?numSimilarRaters=1&minimalRatings=1",
+							"host": [
+								"{{baseURL}}movies"
+							],
+							"path": [
+								"similar"
+							],
+							"query": [
+								{
+									"key": "numSimilarRaters",
+									"value": "1"
+								},
+								{
+									"key": "minimalRatings",
+									"value": "1"
+								},
+								{
+									"key": "genre",
+									"value": "Crime",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "similar",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}movies/similar?numSimilarRaters=1&minimalRatings=1",
+									"host": [
+										"{{baseURL}}movies"
+									],
+									"path": [
+										"similar"
+									],
+									"query": [
+										{
+											"key": "numSimilarRaters",
+											"value": "1"
+										},
+										{
+											"key": "minimalRatings",
+											"value": "1"
+										},
+										{
+											"key": "genre",
+											"value": "Crime",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3001"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "379"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"17b-iv76MidU9DR7wdBBBE2SEMBiHOY\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 01 Nov 2024 14:09:27 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"movies\": [\n        {\n            \"item\": 1300854,\n            \"value\": 100\n        },\n        {\n            \"item\": 2278388,\n            \"value\": 100\n        },\n        {\n            \"item\": 1149361,\n            \"value\": 100\n        },\n        {\n            \"item\": 1250777,\n            \"value\": 90\n        },\n        {\n            \"item\": 2053425,\n            \"value\": 90\n        },\n        {\n            \"item\": 1228987,\n            \"value\": 90\n        },\n        {\n            \"item\": 1264904,\n            \"value\": 90\n        },\n        {\n            \"item\": 1483013,\n            \"value\": 90\n        },\n        {\n            \"item\": 1226273,\n            \"value\": 90\n        },\n        {\n            \"item\": 1611224,\n            \"value\": 80\n        },\n        {\n            \"item\": 1591123,\n            \"value\": 70\n        },\n        {\n            \"item\": 1828995,\n            \"value\": 70\n        },\n        {\n            \"item\": 1486192,\n            \"value\": 40\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:3000/api/v1/"
+		}
+	]
+}
