@@ -25,13 +25,15 @@ public class BatchConfig extends DefaultBatchConfiguration {
                                       PlatformTransactionManager transactionManager,
                                       JdbcCursorItemReader<UserMovies> userMoviesReader,
                                       ItemProcessor<UserMovies, UserSignature> userSignatureProcessor,
-                                      JdbcBatchItemWriter<UserSignature> userSignatureWriter) {
+                                      JdbcBatchItemWriter<UserSignature> userSignatureWriter,
+                                      ChunkLoggingListener chunkListener ) {
 
         return new StepBuilder("computeSignaturesStep", jobRepository)
                 .<UserMovies, UserSignature>chunk(1000, transactionManager)
                 .reader(userMoviesReader)
                 .processor(userSignatureProcessor)
                 .writer(userSignatureWriter)
+                .listener(chunkListener)
                 .build();
     }
 
@@ -40,13 +42,15 @@ public class BatchConfig extends DefaultBatchConfiguration {
                                     PlatformTransactionManager transactionManager,
                                     JdbcCursorItemReader<UserSignature> userSignatureReader,
                                     ItemProcessor<UserSignature, LSHBucket> lshProcessor,
-                                    JdbcBatchItemWriter<LSHBucket> lshWriter) {
+                                    JdbcBatchItemWriter<LSHBucket> lshWriter,
+                                    ChunkLoggingListener chunkListener ) {
 
         return new StepBuilder("generateBucketsStep", jobRepository)
                 .<UserSignature, LSHBucket>chunk(2000, transactionManager)
                 .reader(userSignatureReader)
                 .processor(lshProcessor)
                 .writer(lshWriter)
+                .listener(chunkListener)
                 .build();
     }
 
@@ -64,13 +68,15 @@ public class BatchConfig extends DefaultBatchConfiguration {
                                       PlatformTransactionManager transactionManager,
                                       JdbcPagingItemReader<UserSimilarityKey> candidateReader,
                                       ItemProcessor<UserSimilarityKey, UserSimilarity> similarityProcessor,
-                                      JdbcBatchItemWriter<UserSimilarity> similarityWriter
-                                      ) {
+                                      JdbcBatchItemWriter<UserSimilarity> similarityWriter,
+                                      ChunkLoggingListener chunkListener
+    ) {
         return new StepBuilder("computeSimilarityStep", jobRepository)
-                .<UserSimilarityKey, UserSimilarity>chunk(2000, transactionManager)
+                .<UserSimilarityKey, UserSimilarity>chunk(500, transactionManager)
                 .reader(candidateReader)
                 .processor(similarityProcessor)
                 .writer(similarityWriter)
+                .listener(chunkListener)
                 .build();
     }
 

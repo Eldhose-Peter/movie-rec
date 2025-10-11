@@ -24,7 +24,7 @@ public class SimilarityReader {
                 .sortKeys(Map.of("rater_id", Order.ASCENDING))
                 .rowMapper((rs, rowNum) ->
                         new UserSimilarityKey(rs.getInt("rater_id"), rs.getInt("other_rater_id")))
-                .pageSize(5000)
+                .pageSize(2000)
                 .build();
     }
 
