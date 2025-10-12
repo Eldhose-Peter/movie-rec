@@ -5,6 +5,7 @@ import com.example.recommendation.model.UserSimilarity;
 import com.example.recommendation.model.UserSimilarityKey;
 import com.example.recommendation.repository.RatingRepository;
 import com.example.recommendation.service.lsh.Similarity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class UserSimilarityProcessor {
     @Bean
@@ -51,6 +53,7 @@ public class UserSimilarityProcessor {
                                 RatingEvent::getRating
                         )
                 ));
+        log.info("Preloaded all ratings into memory at step start");
 
         return candidate -> {
             Map<Integer, Double> r1 = userRatingsCache.getOrDefault(candidate.getRaterId(), Map.of());
