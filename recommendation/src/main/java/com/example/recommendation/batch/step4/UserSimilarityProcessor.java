@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class UserSimilarityProcessor {
@@ -36,5 +37,31 @@ public class UserSimilarityProcessor {
             return new UserSimilarity(candidate.getRaterId(), candidate.getOtherRaterId(), sim);
         };
     }
+
+    @Bean
+    @StepScope
+    public ItemProcessor<UserSimilarityKey, UserSimilarity> similarityInMemoryProcessor(RatingRepository ratingRepo) {
+        // Preload all ratings into memory at step start
+        Map<Integer, Map<Integer, Double>> userRatingsCache = ratingRepo.findAll()
+                .stream()
+                .collect(Collectors.groupingBy(
+                        r -> r.getId().getRaterId(),
+                        Collectors.toMap(
+                                RatingEvent::getMovieId,
+                                RatingEvent::getRating
+                        )
+                ));
+
+        return candidate -> {
+            Map<Integer, Double> r1 = userRatingsCache.getOrDefault(candidate.getRaterId(), Map.of());
+            Map<Integer, Double> r2 = userRatingsCache.getOrDefault(candidate.getOtherRaterId(), Map.of());
+
+            // Compute similarity
+            double sim = Similarity.cosine(r1, r2);
+
+            return new UserSimilarity(candidate.getRaterId(), candidate.getOtherRaterId(), sim);
+        };
+    }
+
 
 }
