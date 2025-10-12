@@ -11,7 +11,7 @@ services:
       POSTGRES_DB: node-postgres-demo
     volumes:
       - ./db-init:/docker-entrypoint-initdb.d
-      - pgdata:/var/lib/postgresql/data
+      - ./pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -70,6 +70,3 @@ services:
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/dashboards:/var/lib/grafana/dashboards
-
-volumes:
-  pgdata:
