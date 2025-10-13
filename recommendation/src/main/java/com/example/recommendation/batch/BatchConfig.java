@@ -67,14 +67,14 @@ public class BatchConfig extends DefaultBatchConfiguration {
     public Step computeSimilarityStep(JobRepository jobRepository,
                                       PlatformTransactionManager transactionManager,
                                       JdbcCursorItemReader<UserSimilarityKey> candidateCursorReader,
-                                      ItemProcessor<UserSimilarityKey, UserSimilarity> similarityInMemoryProcessor,
+                                      ItemProcessor<UserSimilarityKey, UserSimilarity> similarityProcessor,
                                       JdbcBatchItemWriter<UserSimilarity> similarityWriter,
                                       ChunkLoggingListener chunkListener
     ) {
         return new StepBuilder("computeSimilarityStep", jobRepository)
                 .<UserSimilarityKey, UserSimilarity>chunk(500, transactionManager)
                 .reader(candidateCursorReader)
-                .processor(similarityInMemoryProcessor)
+                .processor(similarityProcessor)
                 .writer(similarityWriter)
                 .listener(chunkListener)
                 .build();

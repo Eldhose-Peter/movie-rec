@@ -23,20 +23,45 @@ public class UserSimilarityProcessor {
     @StepScope
     public ItemProcessor<UserSimilarityKey, UserSimilarity> similarityProcessor(RatingRepository ratingRepo) {
         return candidate -> {
-            List<RatingEvent> ratings1 = ratingRepo.findById_RaterId(candidate.getRaterId());
+            long start = System.currentTimeMillis();
+            int rater1 = candidate.getRaterId();
+            int rater2 = candidate.getOtherRaterId();
+
+            // --- Step 1: Fetch ratings ---
+            long fetchStart = System.currentTimeMillis();
+            List<RatingEvent> ratings1 = ratingRepo.findById_RaterId(rater1);
+            List<RatingEvent> ratings2 = ratingRepo.findById_RaterId(rater2);
+            long fetchEnd = System.currentTimeMillis();
+
+            // --- Step 2: Build maps ---
             Map<Integer, Double> r1 = new HashMap<>();
             for (RatingEvent row : ratings1) {
                 r1.put(row.getMovieId(), row.getRating());
             }
-
-            List<RatingEvent> ratings2 = ratingRepo.findById_RaterId(candidate.getOtherRaterId());
             Map<Integer, Double> r2 = new HashMap<>();
             for (RatingEvent row : ratings2) {
                 r2.put(row.getMovieId(), row.getRating());
             }
+            long mapEnd = System.currentTimeMillis();
 
+            // --- Step 3: Compute similarity ---
             double sim = Similarity.cosine(r1, r2);
-            return new UserSimilarity(candidate.getRaterId(), candidate.getOtherRaterId(), sim);
+            long simEnd = System.currentTimeMillis();
+
+            // --- Step 4: Log timings ---
+            long totalTime = simEnd - start;
+            log.debug(
+                    "Processed pair ({}, {}) | fetch={} ms | map={} ms | sim={} ms | total={} ms | ratings1={} | ratings2={}",
+                    rater1, rater2,
+                    (fetchEnd - fetchStart),
+                    (mapEnd - fetchEnd),
+                    (simEnd - mapEnd),
+                    totalTime,
+                    ratings1.size(),
+                    ratings2.size()
+            );
+
+            return new UserSimilarity(rater1, rater2, sim);
         };
     }
 
@@ -65,6 +90,8 @@ public class UserSimilarityProcessor {
             return new UserSimilarity(candidate.getRaterId(), candidate.getOtherRaterId(), sim);
         };
     }
+
+
 
 
 }
