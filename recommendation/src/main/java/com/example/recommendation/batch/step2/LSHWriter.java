@@ -23,6 +23,7 @@ public class LSHWriter {
             ON CONFLICT DO NOTHING
         """)
                 .beanMapped()
+                .assertUpdates(false) // allow zero updates on rows
                 .build();
     }
 
