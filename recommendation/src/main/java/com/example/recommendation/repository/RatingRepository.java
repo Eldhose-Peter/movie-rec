@@ -6,6 +6,7 @@ import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 import java.util.Optional;
 
@@ -19,6 +20,10 @@ public interface RatingRepository extends Repository<RatingEvent, Long> {
     List<RatingEvent> findAll();
 
     List<RatingEvent> findById_RaterId(Integer raterId);
+
+    @Query("SELECT r FROM RatingEvent r WHERE r.id.raterId IN :raterIds")
+    List<RatingEvent> findByRaterIds(@Param("raterIds") Set<Integer> raterIds);
+
 
     RatingEvent findById_RaterIdAndId_MovieId(Integer raterId, Integer movieId);
 

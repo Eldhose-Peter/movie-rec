@@ -1,6 +1,7 @@
 package com.example.recommendation.batch;
 
 import com.example.recommendation.batch.step3.GenerateCandidatePairsTasklet;
+import com.example.recommendation.batch.step4.RatingsPrefetchListener;
 import com.example.recommendation.model.*;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -67,16 +68,18 @@ public class BatchConfig extends DefaultBatchConfiguration {
     public Step computeSimilarityStep(JobRepository jobRepository,
                                       PlatformTransactionManager transactionManager,
                                       JdbcCursorItemReader<UserSimilarityKey> candidateCursorReader,
-                                      ItemProcessor<UserSimilarityKey, UserSimilarity> similarityLRUCacheProcessor,
+                                      ItemProcessor<UserSimilarityKey, UserSimilarity> similarityPrefetchProcessor,
                                       JdbcBatchItemWriter<UserSimilarity> similarityWriter,
+                                      RatingsPrefetchListener prefetchListener,
                                       ChunkLoggingListener chunkListener
     ) {
         return new StepBuilder("computeSimilarityStep", jobRepository)
                 .<UserSimilarityKey, UserSimilarity>chunk(500, transactionManager)
                 .reader(candidateCursorReader)
-                .processor(similarityLRUCacheProcessor)
+                .processor(similarityPrefetchProcessor)
                 .writer(similarityWriter)
                 .listener(chunkListener)
+                .listener(prefetchListener)
                 .build();
     }
 

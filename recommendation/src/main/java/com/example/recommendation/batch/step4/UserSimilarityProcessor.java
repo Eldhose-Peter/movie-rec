@@ -130,6 +130,37 @@ public class UserSimilarityProcessor {
         };
     }
 
+    @Bean
+    @StepScope
+    public ItemProcessor<UserSimilarityKey, UserSimilarity> similarityPrefetchProcessor(RatingRepository ratingRepo, RatingsPrefetchListener prefetchListener) {
+        return candidate -> {
+            long start = System.nanoTime();
+
+            int r1Id = candidate.getRaterId();
+            int r2Id = candidate.getOtherRaterId();
+
+            // cached or loaded on demand
+            Map<Integer, List<RatingEvent>> ratingsCache = prefetchListener.getRatingsCache();
+            List<RatingEvent> ratings1 = ratingsCache.getOrDefault(r1Id, List.of());
+            List<RatingEvent> ratings2 = ratingsCache.getOrDefault(r2Id, List.of());
+
+
+            Map<Integer, Double> r1 = new HashMap<>();
+            for (RatingEvent r : ratings1) r1.put(r.getMovieId(), r.getRating());
+
+            Map<Integer, Double> r2 = new HashMap<>();
+            for (RatingEvent r : ratings2) r2.put(r.getMovieId(), r.getRating());
+
+            double sim = Similarity.cosine(r1, r2);
+
+            long end = System.nanoTime();
+            log.debug("Processed pair ({}, {})  | total={} ms",
+                    r1Id, r2Id, (end - start) / 1_000_000.0);
+
+            return new UserSimilarity(r1Id, r2Id, sim);
+        };
+    }
+
 
 
 
