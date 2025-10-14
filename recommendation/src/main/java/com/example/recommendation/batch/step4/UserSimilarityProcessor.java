@@ -134,8 +134,6 @@ public class UserSimilarityProcessor {
     @StepScope
     public ItemProcessor<UserSimilarityKey, UserSimilarity> similarityPrefetchProcessor(RatingRepository ratingRepo, RatingsPrefetchListener prefetchListener) {
         return candidate -> {
-            long start = System.nanoTime();
-
             int r1Id = candidate.getRaterId();
             int r2Id = candidate.getOtherRaterId();
 
@@ -152,11 +150,6 @@ public class UserSimilarityProcessor {
             for (RatingEvent r : ratings2) r2.put(r.getMovieId(), r.getRating());
 
             double sim = Similarity.cosine(r1, r2);
-
-            long end = System.nanoTime();
-            log.debug("Processed pair ({}, {})  | total={} ms",
-                    r1Id, r2Id, (end - start) / 1_000_000.0);
-
             return new UserSimilarity(r1Id, r2Id, sim);
         };
     }

@@ -5,6 +5,7 @@ import com.example.recommendation.model.UserSimilarityKey;
 import com.example.recommendation.repository.RatingRepository;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.ItemReadListener;
 import org.springframework.batch.core.annotation.AfterChunk;
 import org.springframework.batch.core.annotation.AfterChunkError;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class RatingsPrefetchListener implements ItemReadListener<UserSimilarityKey> {
+public class RatingsPrefetchListener implements ItemReadListener<UserSimilarityKey>, ChunkListener {
 
     private final Set<Integer> currentRaters = new HashSet<>();
     private final RatingRepository ratingRepository;
@@ -35,11 +36,12 @@ public class RatingsPrefetchListener implements ItemReadListener<UserSimilarityK
 
     @Override
     public void beforeRead() {
-        // no-op
+        log.info("Pre processing before read");
     }
 
     @Override
     public void afterRead(UserSimilarityKey item) {
+        log.info("Post processing after read complete");
         currentRaters.add(item.getRaterId());
         currentRaters.add(item.getOtherRaterId());
     }
@@ -50,14 +52,14 @@ public class RatingsPrefetchListener implements ItemReadListener<UserSimilarityK
     }
 
     // Called at chunk boundaries
-    @BeforeChunk
+    @Override
     public void beforeChunk(ChunkContext context) {
         log.info("Pre-processing before chunk");
         currentRaters.clear();
         ratingsCache.clear();
     }
 
-    @AfterChunk
+    @Override
     public void afterChunk(ChunkContext context) {
         log.info("Post-processing after chunk");
         // Fetch all ratings for users seen in this chunk
@@ -71,7 +73,7 @@ public class RatingsPrefetchListener implements ItemReadListener<UserSimilarityK
         currentRaters.clear();
     }
 
-    @AfterChunkError
+    @Override
     public void afterChunkError(ChunkContext context) {
         currentRaters.clear();
     }
