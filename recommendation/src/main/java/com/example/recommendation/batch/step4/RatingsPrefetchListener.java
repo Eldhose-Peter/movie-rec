@@ -36,12 +36,11 @@ public class RatingsPrefetchListener implements ItemReadListener<UserSimilarityK
 
     @Override
     public void beforeRead() {
-        log.info("Pre processing before read");
+        //no-op
     }
 
     @Override
     public void afterRead(UserSimilarityKey item) {
-        log.info("Post processing after read complete");
         currentRaters.add(item.getRaterId());
         currentRaters.add(item.getOtherRaterId());
     }
@@ -63,6 +62,7 @@ public class RatingsPrefetchListener implements ItemReadListener<UserSimilarityK
     public void afterChunk(ChunkContext context) {
         log.info("Post-processing after chunk");
         // Fetch all ratings for users seen in this chunk
+        long start =  System.currentTimeMillis();
         if (!currentRaters.isEmpty()) {
             Map<Integer, List<RatingEvent>> fetched = ratingRepository.findByRaterIds(currentRaters)
                     .stream()
@@ -70,6 +70,7 @@ public class RatingsPrefetchListener implements ItemReadListener<UserSimilarityK
 
             ratingsCache.putAll(fetched);
         }
+        log.info("Database fetch | delay {} | size {}", System.currentTimeMillis()-start, ratingsCache.size() );
         currentRaters.clear();
     }
 
