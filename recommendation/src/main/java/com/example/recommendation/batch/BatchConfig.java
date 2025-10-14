@@ -3,6 +3,8 @@ package com.example.recommendation.batch;
 import com.example.recommendation.batch.step3.GenerateCandidatePairsTasklet;
 import com.example.recommendation.batch.step4.RatingsPrefetchListener;
 import com.example.recommendation.model.*;
+import org.springframework.batch.core.ChunkListener;
+import org.springframework.batch.core.ItemReadListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.support.DefaultBatchConfiguration;
@@ -79,7 +81,8 @@ public class BatchConfig extends DefaultBatchConfiguration {
                 .processor(similarityPrefetchProcessor)
                 .writer(similarityWriter)
                 .listener(chunkListener)
-                .listener(prefetchListener)
+                .listener((ItemReadListener<UserSimilarityKey>) prefetchListener)
+                .listener((ChunkListener) prefetchListener)
                 .build();
     }
 
