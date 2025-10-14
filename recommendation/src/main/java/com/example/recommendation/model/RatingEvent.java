@@ -10,20 +10,25 @@ import java.time.LocalDateTime;
 @Getter
 public class RatingEvent {
     @EmbeddedId
-    private RatingId id;
-    private Double rating;
+    private final RatingId id;
+    private final Double rating;
     @Column(name = "time")
     private LocalDateTime timestamp;
+
+    public RatingEvent(Integer raterId, Integer movieId, Double rating){
+        this.id = new RatingId(raterId,movieId);
+        this.rating = rating;
+    }
 
     // Convenience getters
     @Transient
     public Integer getMovieId() {
-        return id != null ? id.getMovieId() : null;
+        return id.getMovieId();
     }
 
     @Transient
     public Integer getRaterId() {
-        return id != null ? id.getRaterId() : null;
+        return id.getRaterId();
     }
 
 }

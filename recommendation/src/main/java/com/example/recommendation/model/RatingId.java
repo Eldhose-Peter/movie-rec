@@ -1,18 +1,18 @@
 package com.example.recommendation.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+@Getter
+@Setter
+@AllArgsConstructor
 public class RatingId implements Serializable {
-    @Getter
-    @Setter
-    private Integer raterId;
 
-    @Getter
-    @Setter
+    private Integer raterId;
     private Integer movieId;
 
 
