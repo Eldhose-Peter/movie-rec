@@ -59,7 +59,7 @@ public class RatingsPrefetchListener implements ItemReadListener<UserSimilarityK
 
     @AfterChunk
     public void afterChunk(ChunkContext context) {
-        log.info("Post-processing after chunk")
+        log.info("Post-processing after chunk");
         // Fetch all ratings for users seen in this chunk
         if (!currentRaters.isEmpty()) {
             Map<Integer, List<RatingEvent>> fetched = ratingRepository.findByRaterIds(currentRaters)
