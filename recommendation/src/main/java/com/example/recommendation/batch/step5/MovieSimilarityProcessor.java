@@ -8,12 +8,14 @@ import com.example.recommendation.repository.RatingRepository;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Component
 public class MovieSimilarityProcessor {
 
     @Bean
