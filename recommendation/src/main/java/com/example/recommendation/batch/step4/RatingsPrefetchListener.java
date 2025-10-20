@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.ItemReadListener;
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Component
-public class RatingsPrefetchListener implements ItemReadListener<UserSimilarityKey>, ChunkListener {
+public class RatingsPrefetchListener implements ItemReadListener<UserSimilarityKey>, ChunkListener, StepExecutionListener {
 
     private final Set<Integer> currentRaters = new HashSet<>();
     private final RatingJdbcRepository ratingRepository;
@@ -28,6 +30,12 @@ public class RatingsPrefetchListener implements ItemReadListener<UserSimilarityK
 
     public RatingsPrefetchListener(RatingJdbcRepository ratingRepository) {
         this.ratingRepository = ratingRepository;
+    }
+
+    @Override
+    public void beforeStep(StepExecution stepExecution) {
+        ratingsCache.clear();
+        currentRaters.clear();
     }
 
     @Override
@@ -49,12 +57,6 @@ public class RatingsPrefetchListener implements ItemReadListener<UserSimilarityK
     // Called at chunk boundaries
     @Override
     public void beforeChunk(ChunkContext context) {
-        currentRaters.clear();
-        ratingsCache.clear();
-    }
-
-    @Override
-    public void afterChunk(ChunkContext context) {
         // Fetch all ratings for users seen in this chunk
         long start =  System.currentTimeMillis();
         if (!currentRaters.isEmpty()) {
@@ -64,6 +66,11 @@ public class RatingsPrefetchListener implements ItemReadListener<UserSimilarityK
         }
         log.info("Database fetch | delay {} | size {}", System.currentTimeMillis()-start, ratingsCache.size() );
         currentRaters.clear();
+    }
+
+    @Override
+    public void afterChunk(ChunkContext context) {
+        // no-op
     }
 
     @Override
