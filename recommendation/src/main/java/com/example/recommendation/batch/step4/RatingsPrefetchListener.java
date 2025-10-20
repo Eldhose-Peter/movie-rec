@@ -57,6 +57,7 @@ public class RatingsPrefetchListener implements ItemReadListener<UserSimilarityK
     // Called at chunk boundaries
     @Override
     public void beforeChunk(ChunkContext context) {
+        ratingsCache.clear();
         // Fetch all ratings for users seen in this chunk
         long start =  System.currentTimeMillis();
         if (!currentRaters.isEmpty()) {

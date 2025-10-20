@@ -58,6 +58,7 @@ public class SimilaritiesPrefetchListener implements ItemReadListener<UserSimila
     @Override
     public void beforeChunk(ChunkContext context) {
 
+        ratingsCache.clear();
         long start =  System.currentTimeMillis();
         if (!currentRaters.isEmpty()) {
             Map<Integer, List<RatingEvent>> fetched = ratingRepository.getRatingsForRaters(currentRaters);
