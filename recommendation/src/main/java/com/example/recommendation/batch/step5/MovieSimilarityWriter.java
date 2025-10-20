@@ -18,7 +18,7 @@ public class MovieSimilarityWriter {
 
     @Bean
     @StepScope
-    public ItemWriter<List<MovieWeightContribution>> flatteningWriter(JdbcBatchItemWriter<MovieWeightContribution> movieSimilarityWriter) {
+    public ItemWriter<List<MovieWeightContribution>> flatteningWriter(JdbcBatchItemWriter<MovieWeightContribution> movieSimilarityJdbcWriter) {
         return chunk -> {
             List<MovieWeightContribution> flatList = new ArrayList<>();
 
@@ -28,7 +28,7 @@ public class MovieSimilarityWriter {
 
             if (!flatList.isEmpty()) {
                 Chunk<MovieWeightContribution> flatChunk = new Chunk<>(flatList);
-                movieSimilarityWriter.write(flatChunk);
+                movieSimilarityJdbcWriter.write(flatChunk);
             }
         };
     }
@@ -36,7 +36,7 @@ public class MovieSimilarityWriter {
 
     @Bean
     @StepScope
-    public JdbcBatchItemWriter<MovieWeightContribution> movieSimilarityWriter(DataSource dataSource) {
+    public JdbcBatchItemWriter<MovieWeightContribution> movieSimilarityJdbcWriter(DataSource dataSource) {
         return new JdbcBatchItemWriterBuilder<MovieWeightContribution>()
                 .itemSqlParameterSourceProvider(new org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider<>())
                 .sql("""

@@ -92,7 +92,7 @@ public class BatchConfig extends DefaultBatchConfiguration {
     public Step generateRecommendationsStep(JobRepository jobRepository,
                                             PlatformTransactionManager transactionManager,
                                             JdbcCursorItemReader<UserSimilarity> userSimilarityCursorReader,
-                                            ItemProcessor<UserSimilarity, List<MovieWeightContribution>> movieSimilarityProcessor,
+                                            ItemProcessor<UserSimilarity, List<MovieWeightContribution>> movieSimilarityPrefetchProcessor,
                                             ItemWriter<List<MovieWeightContribution>> flatteningWriter,
                                             RatingsPrefetchListener prefetchListener,
                                             ChunkLoggingListener chunkListener) {
@@ -100,7 +100,7 @@ public class BatchConfig extends DefaultBatchConfiguration {
         return new StepBuilder("generateRecommendationsStep", jobRepository)
                 .<UserSimilarity, List<MovieWeightContribution>>chunk(1000, transactionManager)
                 .reader(userSimilarityCursorReader)
-                .processor(movieSimilarityProcessor)
+                .processor(movieSimilarityPrefetchProcessor)
                 .writer(flatteningWriter)
                 .listener(chunkListener)
                 .listener((ItemReadListener<UserSimilarityKey>) prefetchListener)
