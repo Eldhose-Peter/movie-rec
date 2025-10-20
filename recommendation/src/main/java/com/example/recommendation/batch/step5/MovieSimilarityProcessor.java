@@ -33,6 +33,8 @@ public class MovieSimilarityProcessor {
             List<RatingEvent> ratings1 = ratingsCache.getOrDefault(r1Id, List.of());
             List<RatingEvent> ratings2 = ratingsCache.getOrDefault(r2Id, List.of());
 
+            log.info("Ratings1 size {}, Ratings2 size {}", ratings1.size(), ratings2.size());
+
             // for each movie not watched by rater1,
             // calculate the weighted rating by multiplying with rater closeness
             Set<Integer> ratedByRater1 = ratings1.stream()
