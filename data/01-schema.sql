@@ -86,3 +86,17 @@ CREATE TABLE user_similarity (
     PRIMARY KEY (rater_id, other_rater_id)
 );
 
+-- Create recommendations table
+CREATE TABLE user_recommendations (
+    user_id INT NOT NULL,
+    movie_id INT NOT NULL,
+    weighted_sum_total DOUBLE PRECISION DEFAULT 0,
+    weight_total DOUBLE PRECISION DEFAULT 0,
+    predicted_rating DOUBLE PRECISION GENERATED ALWAYS AS
+        (CASE WHEN weight_total > 0 
+              THEN weighted_sum_total / weight_total 
+              ELSE 0 END) STORED,
+    PRIMARY KEY (user_id, movie_id)
+);
+
+

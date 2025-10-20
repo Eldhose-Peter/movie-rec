@@ -12,12 +12,14 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
-import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
+
+import java.util.List;
 
 
 @Configuration
@@ -87,16 +89,49 @@ public class BatchConfig extends DefaultBatchConfiguration {
     }
 
     @Bean
+    public Step generateRecommendationsStep(JobRepository jobRepository,
+                                            PlatformTransactionManager transactionManager,
+                                            JdbcCursorItemReader<UserSimilarity> userSimilarityCursorReader,
+                                            ItemProcessor<UserSimilarity, List<MovieWeightContribution>> movieSimilarityProcessor,
+                                            ItemWriter<List<MovieWeightContribution>> flatteningWriter,
+                                            RatingsPrefetchListener prefetchListener,
+                                            ChunkLoggingListener chunkListener) {
+
+        return new StepBuilder("generateRecommendationsStep", jobRepository)
+                .<UserSimilarity, List<MovieWeightContribution>>chunk(1000, transactionManager)
+                .reader(userSimilarityCursorReader)
+                .processor(movieSimilarityProcessor)
+                .writer(flatteningWriter)
+                .listener(chunkListener)
+                .listener((ItemReadListener<UserSimilarityKey>) prefetchListener)
+                .listener((ChunkListener) prefetchListener)
+                .build();
+    }
+
+
+
+
+//    @Bean
+//    public Job similarityJob(JobRepository jobRepository,
+//                             Step computeSignaturesStep,
+//                             Step generateBucketsStep,
+//                             Step generateCandidatePairsStep,
+//                             Step computeSimilarityStep,
+//                             Step generateRecommendationsStep) {
+//        return new JobBuilder("similarityJob", jobRepository)
+//                .start(computeSignaturesStep)
+//                .next(generateBucketsStep)
+//                .next(generateCandidatePairsStep)
+//                .next(computeSimilarityStep)
+//                .next(generateRecommendationsStep)
+//                .build();
+//    }
+
+    @Bean
     public Job similarityJob(JobRepository jobRepository,
-                             Step computeSignaturesStep,
-                             Step generateBucketsStep,
-                             Step generateCandidatePairsStep,
-                             Step computeSimilarityStep) {
+                             Step generateRecommendationsStep) {
         return new JobBuilder("similarityJob", jobRepository)
-                .start(computeSignaturesStep)
-                .next(generateBucketsStep)
-                .next(generateCandidatePairsStep)
-                .next(computeSimilarityStep)
+                .start(generateRecommendationsStep)
                 .build();
     }
 
