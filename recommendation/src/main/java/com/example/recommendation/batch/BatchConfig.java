@@ -110,19 +110,27 @@ public class BatchConfig extends DefaultBatchConfiguration {
     }
 
 
+//    @Bean
+//    public Job similarityJob(JobRepository jobRepository,
+//                             Step computeSignaturesStep,
+//                             Step generateBucketsStep,
+//                             Step generateCandidatePairsStep,
+//                             Step computeSimilarityStep,
+//                             Step generateRecommendationsStep) {
+//        return new JobBuilder("similarityJob", jobRepository)
+//                .start(computeSignaturesStep)
+//                .next(generateBucketsStep)
+//                .next(generateCandidatePairsStep)
+//                .next(computeSimilarityStep)
+//                .next(generateRecommendationsStep)
+//                .build();
+//    }
+
     @Bean
     public Job similarityJob(JobRepository jobRepository,
-                             Step computeSignaturesStep,
-                             Step generateBucketsStep,
-                             Step generateCandidatePairsStep,
-                             Step computeSimilarityStep,
                              Step generateRecommendationsStep) {
         return new JobBuilder("similarityJob", jobRepository)
-                .start(computeSignaturesStep)
-                .next(generateBucketsStep)
-                .next(generateCandidatePairsStep)
-                .next(computeSimilarityStep)
-                .next(generateRecommendationsStep)
+                .start(generateRecommendationsStep)
                 .build();
     }
 
