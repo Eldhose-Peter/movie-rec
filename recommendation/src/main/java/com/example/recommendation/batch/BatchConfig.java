@@ -2,6 +2,7 @@ package com.example.recommendation.batch;
 
 import com.example.recommendation.batch.step3.GenerateCandidatePairsTasklet;
 import com.example.recommendation.batch.step4.RatingsPrefetchListener;
+import com.example.recommendation.batch.step5.SimilaritiesPrefetchListener;
 import com.example.recommendation.model.*;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.ItemReadListener;
@@ -94,7 +95,7 @@ public class BatchConfig extends DefaultBatchConfiguration {
                                             JdbcCursorItemReader<UserSimilarity> userSimilarityCursorReader,
                                             ItemProcessor<UserSimilarity, List<MovieWeightContribution>> movieSimilarityPrefetchProcessor,
                                             ItemWriter<List<MovieWeightContribution>> flatteningWriter,
-                                            RatingsPrefetchListener prefetchListener,
+                                            SimilaritiesPrefetchListener prefetchListener,
                                             ChunkLoggingListener chunkListener) {
 
         return new StepBuilder("generateRecommendationsStep", jobRepository)
@@ -103,7 +104,7 @@ public class BatchConfig extends DefaultBatchConfiguration {
                 .processor(movieSimilarityPrefetchProcessor)
                 .writer(flatteningWriter)
                 .listener(chunkListener)
-                .listener((ItemReadListener<UserSimilarityKey>) prefetchListener)
+                .listener((ItemReadListener<UserSimilarity>) prefetchListener)
                 .listener((ChunkListener) prefetchListener)
                 .build();
     }
