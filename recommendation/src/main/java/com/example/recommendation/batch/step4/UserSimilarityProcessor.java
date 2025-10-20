@@ -150,9 +150,6 @@ public class UserSimilarityProcessor {
             for (RatingEvent r : ratings2) r2.put(r.getMovieId(), r.getRating());
 
             double sim = Similarity.dotProduct(r1, r2);
-
-            log.info("Similarity : rater1 {}, rater2 {}, similarity {}, ratings1Size {}, rating2Size {}", r1Id, r2Id,sim, ratings1.size(), ratings2.size());
-
             return new UserSimilarity(r1Id, r2Id, sim);
         };
     }
