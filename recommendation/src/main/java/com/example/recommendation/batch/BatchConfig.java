@@ -99,7 +99,7 @@ public class BatchConfig extends DefaultBatchConfiguration {
                                             ChunkLoggingListener chunkListener) {
 
         return new StepBuilder("generateRecommendationsStep", jobRepository)
-                .<UserSimilarity, List<MovieWeightContribution>>chunk(1000, transactionManager)
+                .<UserSimilarity, List<MovieWeightContribution>>chunk(500, transactionManager)
                 .reader(userSimilarityCursorReader)
                 .processor(movieSimilarityPrefetchProcessor)
                 .writer(flatteningWriter)

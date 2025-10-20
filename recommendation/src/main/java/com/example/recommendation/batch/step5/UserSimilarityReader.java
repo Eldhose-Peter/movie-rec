@@ -2,6 +2,7 @@ package com.example.recommendation.batch.step5;
 
 
 import com.example.recommendation.model.UserSimilarity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
+@Slf4j
 @Component
 public class UserSimilarityReader {
 
@@ -17,7 +19,7 @@ public class UserSimilarityReader {
     @StepScope
     public JdbcCursorItemReader<UserSimilarity> userSimilarityCursorReader(DataSource dataSource){
         return new JdbcCursorItemReaderBuilder<UserSimilarity>()
-                .name("userSimilarityReader")
+                .name("userSimilarityCursorReader")
                 .dataSource(dataSource)
                 .sql("""
                         SELECT *
@@ -38,7 +40,7 @@ public class UserSimilarityReader {
                     double similarityScore = rs.getDouble("similarity_score");
                     return new UserSimilarity(raterId,otherRaterId,similarityScore);
                 })
-                .fetchSize(500)
+                .fetchSize(2000)
                 .build();
 
     }
