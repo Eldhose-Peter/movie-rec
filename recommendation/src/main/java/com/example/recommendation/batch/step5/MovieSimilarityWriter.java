@@ -1,6 +1,7 @@
 package com.example.recommendation.batch.step5;
 
 import com.example.recommendation.model.MovieWeightContribution;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
@@ -13,6 +14,7 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class MovieSimilarityWriter {
 
@@ -25,6 +27,8 @@ public class MovieSimilarityWriter {
             for (List<MovieWeightContribution> list : chunk) {
                 flatList.addAll(list);  // flatten nested lists
             }
+
+            log.info("Processed similarity for user , movies = {}" ,flatList.size());
 
             if (!flatList.isEmpty()) {
                 Chunk<MovieWeightContribution> flatChunk = new Chunk<>(flatList);
