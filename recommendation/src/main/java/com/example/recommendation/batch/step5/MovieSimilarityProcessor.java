@@ -22,7 +22,7 @@ public class MovieSimilarityProcessor {
 
     @Bean
     @StepScope
-    public ItemProcessor<UserSimilarity, List<MovieWeightContribution>> movieSimilarityPrefetchProcessor(RatingRepository ratingRepository, RatingsPrefetchListener prefetchListener){
+    public ItemProcessor<UserSimilarity, List<MovieWeightContribution>> movieSimilarityPrefetchProcessor(RatingRepository ratingRepository, SimilaritiesPrefetchListener prefetchListener){
         return candidate -> {
             int r1Id = candidate.getRaterId();
             int r2Id = candidate.getOtherRaterId();
