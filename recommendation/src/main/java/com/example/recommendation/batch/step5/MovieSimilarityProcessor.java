@@ -5,6 +5,7 @@ import com.example.recommendation.model.MovieWeightContribution;
 import com.example.recommendation.model.RatingEvent;
 import com.example.recommendation.model.UserSimilarity;
 import com.example.recommendation.repository.RatingRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class MovieSimilarityProcessor {
 
@@ -47,6 +49,8 @@ public class MovieSimilarityProcessor {
                             similarity                   // weight part
                     ))
                     .toList();
+
+            log.debug("User {} vs {} produced {} contributions", r1Id, r2Id, contributions.size());
 
             return contributions;
 

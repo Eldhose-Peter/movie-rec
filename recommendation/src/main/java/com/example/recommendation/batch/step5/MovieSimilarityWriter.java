@@ -24,6 +24,8 @@ public class MovieSimilarityWriter {
         return chunk -> {
             List<MovieWeightContribution> flatList = new ArrayList<>();
 
+            log.info("Chunk size recieved is {},", chunk.size());
+
             for (List<MovieWeightContribution> list : chunk) {
                 flatList.addAll(list);  // flatten nested lists
             }
