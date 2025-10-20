@@ -149,7 +149,7 @@ public class UserSimilarityProcessor {
             Map<Integer, Double> r2 = new HashMap<>();
             for (RatingEvent r : ratings2) r2.put(r.getMovieId(), r.getRating());
 
-            double sim = Similarity.cosine(r1, r2);
+            double sim = Similarity.dotProduct(r1, r2);
             return new UserSimilarity(r1Id, r2Id, sim);
         };
     }
