@@ -27,7 +27,7 @@ public class UserSimilarityReader {
                                 other_rater_id,
                                 similarity_score,
                                 ROW_NUMBER() OVER (PARTITION BY rater_id ORDER BY similarity_score DESC) AS rn
-                            FROM user_similarities
+                            FROM user_similarity
                         ) t
                         WHERE rn <= 50
                         ORDER BY rater_id, similarity_score DESC;
