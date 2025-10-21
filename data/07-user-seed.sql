@@ -1,23 +1,5 @@
--- Connect to the node-postgres-demo database
-\c node-postgres-demo;
-
--- Load data into genres table
-COPY genres(id, name)
-FROM '/docker-entrypoint-initdb.d/genres.csv'
-DELIMITER ','
-CSV HEADER;
-
--- Load data into movies table
-COPY movies(id, title, original_title, release_date, overview, popularity, vote_count, vote_average, original_language, backdrop_path, poster_path, adult, video)
-FROM '/docker-entrypoint-initdb.d/movies.csv'
-DELIMITER ','
-CSV HEADER;
-
--- Load data into movie_genres table
-COPY movie_genres(movie_id, genre_id)
-FROM '/docker-entrypoint-initdb.d/movies-genres.csv'
-DELIMITER ','
-CSV HEADER;
+-- Connect to the user_db database
+\c user_db;
 
 -- Create a temporary staging table
 CREATE TEMP TABLE ratings_staging (

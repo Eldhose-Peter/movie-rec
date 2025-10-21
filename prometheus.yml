@@ -8,10 +8,15 @@ scrape_configs:
       - targets: ['localhost:9090']
 
   # Scrape Spring Boot application's actuator metrics
-  - job_name: 'spring-app'
+  - job_name: 'movie-service'
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['spring-recommendation-app:8080']
+      - targets: ['movie-service:8080']
+
+  - job_name: 'recommendation-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['recommendation-service:8080']
 
   # Scrape PostgreSQL exporter metrics
   - job_name: 'postgres-exporter'

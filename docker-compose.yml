@@ -8,7 +8,6 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: node-postgres-demo
     volumes:
       - ./db-init:/docker-entrypoint-initdb.d
       - pgdata:/var/lib/postgresql/data
@@ -22,19 +21,21 @@ services:
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter
     container_name: postgres-exporter
+    restart: always
     environment:
-      DATA_SOURCE_NAME: "postgresql://postgres:postgres@postgres:5432/node-postgres-demo?sslmode=disable"
+      DATA_SOURCE_NAME: "postgresql://postgres:postgres@postgres:5432/recommendation_db?sslmode=disable"
     ports:
       - "9187:9187"
     depends_on:
       postgres:
         condition: service_healthy
 
-  spring-app:
+  recommendation-service:
     build:
       context: ./recommendation
       dockerfile: Dockerfile
     container_name: spring-recommendation-app
+    restart: always
     ports:
       - "8080:8080"
     depends_on:
@@ -42,7 +43,24 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/node-postgres-demo
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/recommendation_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+  movie-service:
+    build:
+      context: ./movie-service
+      dockerfile: Dockerfile
+    container_name: spring-movie-app
+    restart: always
+    ports:
+      - "8081:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/movie_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
 
@@ -54,7 +72,8 @@ services:
     ports:
       - "9090:9090"
     depends_on:
-      - spring-app
+      - movie-service
+      - recommendation-service
       - postgres-exporter
 
   grafana:

@@ -1,5 +1,5 @@
--- Connect to the node-postgres-demo database
-\c node-postgres-demo;
+-- Connect to the recommendation_db database
+\c recommendation_db;
 
 -- Create users table
 CREATE TABLE IF NOT EXISTS users (
