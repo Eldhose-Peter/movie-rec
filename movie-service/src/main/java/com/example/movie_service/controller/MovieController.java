@@ -56,7 +56,7 @@ public class MovieController {
 
     ) {
         int safeSize = Math.min(Math.max(1, size), 200);
-        List<Movie> list = movieFacade.recommend(genreIds, yearGte, yearLte, ratingGte, page, safeSize, sort);
+        List<Movie> list = movieFacade.recommend(userId, genreIds, yearGte, yearLte, ratingGte, page, safeSize, sort);
         return ResponseEntity.ok(list);
     }
 

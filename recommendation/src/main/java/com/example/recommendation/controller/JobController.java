@@ -13,7 +13,7 @@ public class JobController {
     private final JobLauncher jobLauncher;
     private final Job similarityJob;
 
-    @PostMapping("/run-similarity")
+    @PostMapping("/start")
     public String runSimilarityJob(@RequestParam(required = false) String param) {
         try {
             JobParameters jobParameters = new JobParametersBuilder()
@@ -26,11 +26,6 @@ public class JobController {
         } catch (Exception e) {
             return "❌ Failed to start job: " + e.getMessage();
         }
-    }
-
-    @GetMapping("/test")
-    public String testEndpoint(){
-        return "Hello Docker World";
     }
 }
 
