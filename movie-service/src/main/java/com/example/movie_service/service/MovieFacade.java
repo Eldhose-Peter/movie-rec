@@ -2,7 +2,6 @@ package com.example.movie_service.service;
 
 
 import com.example.movie_service.Recommendation;
-import com.example.movie_service.RecommendationServiceGrpc;
 import com.example.movie_service.grpc.RecommendationGrpcClient;
 import com.example.movie_service.model.Movie;
 import com.example.movie_service.repository.MovieRepository;

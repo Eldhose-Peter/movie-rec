@@ -63,6 +63,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/movie_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
+      GRPC_CLIENT_RECOMMENDATION_ADDRESS: static://recommendation-service:9090
 
   prometheus:
     image: prom/prometheus
