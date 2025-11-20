@@ -9,7 +9,11 @@ import com.example.movie_service.repository.MovieRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -29,9 +33,34 @@ public class MovieFacade {
     }
 
     public List<Movie> recommend(String userId, List<String> genreIds, Integer yearGte, Integer yearLte, Integer ratingGte, int page, int safeSize, String sort){
-        List<Recommendation> recommendations = client.getRecommendations(Long.parseLong(userId),page,safeSize);
-        log.info("Received recommendations of size {}", recommendations.size());
-        return List.of();
+        // fetch recommendations from your client
+        List<Recommendation> recommendations = client.getRecommendations(Long.parseLong(userId), page, safeSize);
+        if (recommendations == null || recommendations.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Extract movie ids in recommendation order
+        List<Integer> recIds = recommendations.stream()
+                .map(Recommendation::getMovieId)   // assumed Long
+                .filter(Objects::nonNull)
+                .map(Long::intValue)
+                .collect(Collectors.toList());
+
+        if (recIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Movie> movies = repo.findByIds(recIds);
+
+        Map<Integer, Movie> movieMap = movies.stream().collect(Collectors.toMap(Movie::getId, m -> m));
+
+        // Build initial ordered list by recommendation order, skipping missing ids
+        List<Movie> candidates = recIds.stream()
+                .map(movieMap::get)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        return candidates;
     }
 
 }

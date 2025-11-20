@@ -100,4 +100,24 @@ public class MovieRepository {
         return jdbc.query(sql, params, MOVIE_MAPPER);
     }
 
+    public List<Movie> findByIds(List<Integer> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        String baseSql = """
+        SELECT m.*,
+               COALESCE(array_agg(DISTINCT mg.genre_id ORDER BY mg.genre_id), ARRAY[]::integer[]) AS genre_ids
+        FROM movies m
+        LEFT JOIN movie_genres mg ON mg.movie_id = m.id
+        WHERE m.id IN (:ids)
+        GROUP BY m.id
+        """;
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("ids", ids);
+
+        return jdbc.query(baseSql, params, MOVIE_MAPPER);
+    }
+
 }
