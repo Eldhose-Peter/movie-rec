@@ -16,6 +16,7 @@ public class UserRecommendationService {
         this.repository = repository;
     }
 
+    // TODO : Implement limt and offset for pagination
     public List<UserRecommendation> getRecommendations(long userId, int limit, int offset) {
         return repository.findTopByUser(userId);
     }

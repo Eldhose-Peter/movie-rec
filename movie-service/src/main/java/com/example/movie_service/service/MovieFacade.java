@@ -34,7 +34,8 @@ public class MovieFacade {
     public List<Movie> recommend(String userId, List<Integer> genreIds, Integer yearGte, Integer yearLte, Integer ratingGte, int page, int safeSize, String sort){
 
         // fetch recommendations from your client
-        List<Recommendation> recommendations = client.getRecommendations(Long.parseLong(userId), page, safeSize);
+        // TODO: page and limit needs to be implemented in rec service
+        List<Recommendation> recommendations = client.getRecommendations(Long.parseLong(userId), 50, 0);
         if (recommendations == null || recommendations.isEmpty()) {
             return Collections.emptyList();
         }
@@ -62,9 +63,7 @@ public class MovieFacade {
         Predicate<Movie> filters = movieFilterService.buildFilter(genreIds, yearGte, yearLte, ratingGte);
         Comparator<Movie> sorter = movieFilterService.resolveComparator(sort);
 
-        log.info("Sorteer {}", sorter);
-
-        return candidates.stream().filter(filters).sorted(sorter).collect(Collectors.toList());
+        return candidates.stream().filter(filters).sorted(sorter).skip((long) page * safeSize).limit(safeSize).collect(Collectors.toList());
     }
 
 }
