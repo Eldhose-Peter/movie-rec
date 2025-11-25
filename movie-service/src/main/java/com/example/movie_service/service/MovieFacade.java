@@ -8,10 +8,8 @@ import com.example.movie_service.repository.MovieRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -20,10 +18,12 @@ public class MovieFacade {
 
     private final MovieRepository repo;
     private final RecommendationGrpcClient client;
+    private final MovieFilterService movieFilterService;
 
-    public MovieFacade(MovieRepository repo, RecommendationGrpcClient client) {
+    public MovieFacade(MovieRepository repo, RecommendationGrpcClient client, MovieFilterService movieFilterService) {
         this.repo = repo;
         this.client = client;
+        this.movieFilterService = movieFilterService;
     }
 
     public List<Movie> list(String search, Integer genreId, int page, int size, String sortBy, boolean desc) {
@@ -31,17 +31,16 @@ public class MovieFacade {
         return repo.findAll(search, genreId, offset, size, sortBy, desc);
     }
 
-    public List<Movie> recommend(String userId, List<String> genreIds, Integer yearGte, Integer yearLte, Integer ratingGte, int page, int safeSize, String sort){
+    public List<Movie> recommend(String userId, List<Integer> genreIds, Integer yearGte, Integer yearLte, Integer ratingGte, int page, int safeSize, String sort){
+
         // fetch recommendations from your client
         List<Recommendation> recommendations = client.getRecommendations(Long.parseLong(userId), page, safeSize);
         if (recommendations == null || recommendations.isEmpty()) {
             return Collections.emptyList();
         }
 
-        // Extract movie ids in recommendation order
         List<Integer> recIds = recommendations.stream()
                 .map(Recommendation::getMovieId)   // assumed Long
-                .filter(Objects::nonNull)
                 .map(Long::intValue)
                 .collect(Collectors.toList());
 
@@ -49,6 +48,7 @@ public class MovieFacade {
             return Collections.emptyList();
         }
 
+        // fetch movies data based on recId
         List<Movie> movies = repo.findByIds(recIds);
 
         Map<Integer, Movie> movieMap = movies.stream().collect(Collectors.toMap(Movie::getId, m -> m));
@@ -57,9 +57,14 @@ public class MovieFacade {
         List<Movie> candidates = recIds.stream()
                 .map(movieMap::get)
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
 
-        return candidates;
+        Predicate<Movie> filters = movieFilterService.buildFilter(genreIds, yearGte, yearLte, ratingGte);
+        Comparator<Movie> sorter = movieFilterService.resolveComparator(sort);
+
+        log.info("Sorteer {}", sorter);
+
+        return candidates.stream().filter(filters).sorted(sorter).collect(Collectors.toList());
     }
 
 }

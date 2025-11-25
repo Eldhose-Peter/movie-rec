@@ -48,10 +48,10 @@ public class MovieController {
             @PathVariable String userId,
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "20") int size,
-            @RequestParam(name = "filters[genre]", required = false) List<String> genreIds,
-            @RequestParam(name = "filters[year.gte]", required = false) Integer yearGte,
-            @RequestParam(name = "filters[year.lte]", required = false) Integer yearLte,
-            @RequestParam(name = "filters[rating.gte]", required = false) Integer ratingGte,
+            @RequestParam(name = "genre", required = false) List<Integer> genreIds,
+            @RequestParam(name = "yearGte", required = false) Integer yearGte,
+            @RequestParam(name = "yearLte", required = false) Integer yearLte,
+            @RequestParam(name = "ratingGte", required = false) Integer ratingGte,
             @RequestParam(name = "sort", defaultValue = "id") String sort
 
     ) {
