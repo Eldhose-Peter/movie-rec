@@ -6,6 +6,7 @@ import com.example.movie_service.RecommendationRequest;
 import com.example.movie_service.RecommendationResponse;
 import com.example.movie_service.RecommendationServiceGrpc;
 import net.devh.boot.grpc.client.inject.GrpcClient;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class RecommendationGrpcClient {
     @GrpcClient("recommendation")
     private RecommendationServiceGrpc.RecommendationServiceBlockingStub blockingStub;
 
+    @Cacheable(value = "recommendations", key = "#userId")
     public List<Recommendation> getRecommendations(long userId, int limit, int offset) {
         RecommendationRequest req = RecommendationRequest.newBuilder()
                 .setUserId(userId)
