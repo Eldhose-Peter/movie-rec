@@ -4,8 +4,6 @@
 
 ## Technologies used
 - Node Backend
-- Postgres DB
-- NextJS UI
 - Typescript
 - Docker
 
@@ -18,9 +16,7 @@
 ## Starting project
 
 Building backend Node Application
-- extract data-set.zip file in db-init
 - `npm install`
-- `npm run prestart`
 - `npm run build`
 - `npm run start`
 - `docker compose up`

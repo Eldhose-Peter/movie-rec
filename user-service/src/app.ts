@@ -2,17 +2,17 @@ import express from "express";
 import cors from "cors";
 import { env } from "config/env";
 import errorMiddleware from "middleware/error.middleware";
-import { type Controller } from "interfaces/controller.interface";
 import cookieParser from "cookie-parser";
+import { RouterInterface } from "interfaces/routes.interfaces";
 
 class App {
   private app: express.Application;
 
-  constructor(controllers: Controller[]) {
+  constructor(routes: RouterInterface[]) {
     this.app = express();
 
     this.initializeMiddlewares();
-    this.initializeControllers(controllers);
+    this.initializeRoutes(routes);
 
     this.app.use(errorMiddleware);
   }
@@ -28,9 +28,9 @@ class App {
     this.app.use(cookieParser());
   }
 
-  private initializeControllers(controllers: Controller[]) {
-    controllers.forEach((controller) => {
-      this.app.use("/api/v1", controller.router);
+  private initializeRoutes(routes: RouterInterface[]) {
+    routes.forEach((route) => {
+      this.app.use("/api/v1", route.router);
     });
   }
 

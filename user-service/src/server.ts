@@ -1,11 +1,5 @@
-import { AuthController } from "auth/auth.controller";
-import App from "../app";
-import UsersController from "users/users.controller";
-import MovieController from "movies/movies.controller";
+import App from "app";
+import { AuthRoutes } from "routes/auth.routes";
 
-const app = new App([
-  new AuthController(),
-  new UsersController(),
-  new MovieController(),
-]);
+const app = new App([new AuthRoutes()]);
 app.listen();
