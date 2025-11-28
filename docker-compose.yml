@@ -102,7 +102,7 @@ services:
     container_name: user-service
     restart: always
     ports:
-      - "3000:3000"
+      - "8082:3000"
     depends_on:
       postgres:
         condition: service_healthy
