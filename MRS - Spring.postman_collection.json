@@ -1,0 +1,1127 @@
+{
+	"info": {
+		"_postman_id": "c0ffb544-9d27-435d-aa70-1d7397be7a99",
+		"name": "MRS - Spring",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19966914"
+	},
+	"item": [
+		{
+			"name": "ratings",
+			"item": [
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}:{{auth-port}}/api/v1/ratings",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{auth-port}}",
+							"path": [
+								"api",
+								"v1",
+								"ratings"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "getAll",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{domain}}:{{auth-port}}/api/v1/ratings",
+									"host": [
+										"{{domain}}"
+									],
+									"port": "{{auth-port}}",
+									"path": [
+										"api",
+										"v1",
+										"ratings"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4200"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "85"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"55-4j4cWdpKvtqVEnFHWsrLVAXC0RU\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 29 Nov 2025 11:20:49 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"rater_id\": 140000,\n        \"movie_id\": 123,\n        \"rating\": \"8.0\",\n        \"time\": \"2025-11-29T11:20:40.121Z\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"movieId\": 123,\n    \"rating\": 8,\n    \"comment\": \"nice movie\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}:{{auth-port}}/api/v1/ratings",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{auth-port}}",
+							"path": [
+								"api",
+								"v1",
+								"ratings"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"movieId\": 123,\n    \"rating\": 8,\n    \"comment\": \"nice movie\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}:{{auth-port}}/api/v1/ratings",
+									"host": [
+										"{{domain}}"
+									],
+									"port": "{{auth-port}}",
+									"path": [
+										"api",
+										"v1",
+										"ratings"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4200"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "83"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"53-QqxZjI+gYtuYe/CBY910qNgpJNk\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 29 Nov 2025 11:20:40 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"rater_id\": 140000,\n    \"movie_id\": 123,\n    \"rating\": \"8.0\",\n    \"time\": \"2025-11-29T11:20:40.121Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"movieId\": 123,\n    \"rating\": 7,\n    \"comment\": \"nice movie\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}:{{auth-port}}/api/v1/ratings",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{auth-port}}",
+							"path": [
+								"api",
+								"v1",
+								"ratings"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "update",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"movieId\": 123,\n    \"rating\": 7,\n    \"comment\": \"nice movie\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}:{{auth-port}}/api/v1/ratings",
+									"host": [
+										"{{domain}}"
+									],
+									"port": "{{auth-port}}",
+									"path": [
+										"api",
+										"v1",
+										"ratings"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4200"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "83"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"53-rL6DYHMGutCtxTvddJs2a4Oc0aU\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 29 Nov 2025 11:20:57 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"rater_id\": 140000,\n    \"movie_id\": 123,\n    \"rating\": \"7.0\",\n    \"time\": \"2025-11-29T11:20:40.121Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"movieId\": 123,\n    \"rating\": 7,\n    \"comment\": \"nice movie\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}:{{auth-port}}/api/v1/ratings/123",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{auth-port}}",
+							"path": [
+								"api",
+								"v1",
+								"ratings",
+								"123"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "jobs",
+			"item": [
+				{
+					"name": "start",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}:{{rec-port}}/api/jobs/start?param=test-job-run",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{rec-port}}",
+							"path": [
+								"api",
+								"jobs",
+								"start"
+							],
+							"query": [
+								{
+									"key": "param",
+									"value": "test-job-run"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "recommendation",
+			"item": [
+				{
+					"name": "recommendation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/recommendation/user/71653",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"recommendation",
+								"user",
+								"71653"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Movies",
+			"item": [
+				{
+					"name": "movies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}:{{movie-port}}/api/movies?size=2&search=Batman",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{movie-port}}",
+							"path": [
+								"api",
+								"movies"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "2"
+								},
+								{
+									"key": "search",
+									"value": "Batman"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "movies",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{domain}}:{{movie-port}}/api/movies?size=2&search=Batman",
+									"host": [
+										"{{domain}}"
+									],
+									"port": "{{movie-port}}",
+									"path": [
+										"api",
+										"movies"
+									],
+									"query": [
+										{
+											"key": "size",
+											"value": "2"
+										},
+										{
+											"key": "search",
+											"value": "Batman"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 29 Nov 2025 11:21:16 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"title\": \"Batman vs. Robin\",\n        \"originalTitle\": \"Batman vs. Robin\",\n        \"releaseDate\": \"2015-04-03\",\n        \"overview\": \"Damian Wayne is having a hard time coping with his father's \\\"no killing\\\" rule. Meanwhile, Gotham is going through hell with threats such as the insane Dollmaker, and the secretive Court of Owls.\",\n        \"popularity\": 14.709,\n        \"voteCount\": 902,\n        \"voteAverage\": 7.18,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/g2XhZJhFiHcczWcXEEldItG53gd.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/aGp9XDXmVM5lCKHWtgBC15S7XLr.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            12,\n            16,\n            28,\n            878\n        ],\n        \"id\": 321528\n    },\n    {\n        \"title\": \"LEGO DC Comics Super Heroes: Batman Be-Leaguered\",\n        \"originalTitle\": \"LEGO DC Comics Super Heroes: Batman Be-Leaguered\",\n        \"releaseDate\": \"2014-10-27\",\n        \"overview\": \"When Batman, claiming to be a loner, refuses to join the Justice League, he is drawn into working with them when they are kidnapped one-by-one and held prisoner by one of Batman's nemeses.\",\n        \"popularity\": 9.878,\n        \"voteCount\": 140,\n        \"voteAverage\": 6.56,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/zRJqGtOGS6PRYdEtH69XQmIlQQc.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/7JmTzxQx78PfRKVuQjpG80jjXoM.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            12,\n            16,\n            28,\n            35,\n            10751,\n            10770\n        ],\n        \"id\": 300424\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "recommend",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}:{{movie-port}}/api/users/11402/recommend?size=20&page=0",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{movie-port}}",
+							"path": [
+								"api",
+								"users",
+								"11402",
+								"recommend"
+							],
+							"query": [
+								{
+									"key": "yearGte",
+									"value": "2000",
+									"disabled": true
+								},
+								{
+									"key": "yearLte",
+									"value": "1994",
+									"disabled": true
+								},
+								{
+									"key": "genre",
+									"value": "878",
+									"disabled": true
+								},
+								{
+									"key": "genre",
+									"value": "18",
+									"disabled": true
+								},
+								{
+									"key": "ratingGte",
+									"value": "8",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "20"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "sort",
+									"value": "year_asc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "recommend",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{domain}}:{{movie-port}}/api/users/11402/recommend?size=20&page=0",
+									"host": [
+										"{{domain}}"
+									],
+									"port": "{{movie-port}}",
+									"path": [
+										"api",
+										"users",
+										"11402",
+										"recommend"
+									],
+									"query": [
+										{
+											"key": "yearGte",
+											"value": "2000",
+											"disabled": true
+										},
+										{
+											"key": "yearLte",
+											"value": "1994",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "878",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "18",
+											"disabled": true
+										},
+										{
+											"key": "ratingGte",
+											"value": "8",
+											"disabled": true
+										},
+										{
+											"key": "size",
+											"value": "20"
+										},
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "sort",
+											"value": "year_asc",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 29 Nov 2025 11:21:25 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"title\": \"Braveheart\",\n        \"originalTitle\": \"Braveheart\",\n        \"releaseDate\": \"1995-05-24\",\n        \"overview\": \"Enraged at the slaughter of Murron, his new bride and childhood love, Scottish warrior William Wallace slays a platoon of the local English lord's soldiers. This leads the village to revolt and, eventually, the entire country to rise up against English rule.\",\n        \"popularity\": 55.3,\n        \"voteCount\": 10061,\n        \"voteAverage\": 7.94,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/8lBcqakI3F19NWkXdqE0M8W76b9.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/or1gBugydmjToAEq7OZY0owwFk.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            18,\n            28,\n            36,\n            10752\n        ],\n        \"id\": 197\n    },\n    {\n        \"title\": \"The Usual Suspects\",\n        \"originalTitle\": \"The Usual Suspects\",\n        \"releaseDate\": \"1995-07-19\",\n        \"overview\": \"Held in an L.A. interrogation room, Verbal Kint attempts to convince the feds that a mythic crime lord, Keyser Soze, not only exists, but was also responsible for drawing him and his four partners into a multi-million dollar heist that ended with an explosion in San Pedro harbor – leaving few survivors. Verbal lures his interrogators with an incredible story of the crime lord's almost supernatural prowess.\",\n        \"popularity\": 52.962,\n        \"voteCount\": 10306,\n        \"voteAverage\": 8.18,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/7S7PE3vK9Eh5uzCYBDGk5qTJeYW.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/rWbsxdwF9qQzpTPCLmDfVnVqTK1.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            18,\n            53,\n            80\n        ],\n        \"id\": 629\n    },\n    {\n        \"title\": \"Se7en\",\n        \"originalTitle\": \"Se7en\",\n        \"releaseDate\": \"1995-09-22\",\n        \"overview\": \"Two homicide detectives are on a desperate hunt for a serial killer whose crimes are based on the \\\"seven deadly sins\\\" in this dark and haunting film that takes viewers from the tortured remains of one victim to the next. The seasoned Det. Sommerset researches each sin in an effort to get inside the killer's mind, while his novice partner, Mills, scoffs at his efforts to unravel the case.\",\n        \"popularity\": 94.806,\n        \"voteCount\": 20916,\n        \"voteAverage\": 8.38,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/vxPrxPufDQc4e2zr492LkXoEjdl.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/191nKfP0ehp3uIvWqgPbFmI4lv9.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            53,\n            80,\n            9648\n        ],\n        \"id\": 807\n    },\n    {\n        \"title\": \"Twelve Monkeys\",\n        \"originalTitle\": \"Twelve Monkeys\",\n        \"releaseDate\": \"1995-12-29\",\n        \"overview\": \"In the year 2035, convict James Cole reluctantly volunteers to be sent back in time to discover the origin of a deadly virus that wiped out nearly all of the earth's population and forced the survivors into underground communities. But when Cole is mistakenly sent to 1990 instead of 1996, he's arrested and locked up in a mental hospital. There he meets psychiatrist Dr. Kathryn Railly, and patient Jeffrey Goines, the son of a famous virus expert, who may hold the key to the mysterious rogue group, the Army of the 12 Monkeys, thought to be responsible for unleashing the killer disease.\",\n        \"popularity\": 37.485,\n        \"voteCount\": 8284,\n        \"voteAverage\": 7.6,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/1IWaKG7AWiYMhADxhGtnElDJAGI.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/gt3iyguaCIw8DpQZI1LIN5TohM2.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            53,\n            878,\n            9648\n        ],\n        \"id\": 63\n    },\n    {\n        \"title\": \"Dances with Wolves\",\n        \"originalTitle\": \"Dances with Wolves\",\n        \"releaseDate\": \"1990-03-30\",\n        \"overview\": \"Wounded Civil War soldier John Dunbar tries to commit suicide—and becomes a hero instead. As a reward, he's assigned to his dream post, a remote junction on the Western frontier, and soon makes unlikely friends with the local Sioux tribe.\",\n        \"popularity\": 32.518,\n        \"voteCount\": 4188,\n        \"voteAverage\": 7.8,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/ywWva4trKw7f3wtbz81Fe3FnrtC.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/cvaBVpS0GzKqBd63pFT8f1E8OKv.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            12,\n            18,\n            37\n        ],\n        \"id\": 581\n    },\n    {\n        \"title\": \"Pulp Fiction\",\n        \"originalTitle\": \"Pulp Fiction\",\n        \"releaseDate\": \"1994-09-10\",\n        \"overview\": \"A burger-loving hit man, his philosophical partner, a drug-addled gangster's moll and a washed-up boxer converge in this sprawling, comedic crime caper. Their adventures unfurl in three stories that ingeniously trip back and forth in time.\",\n        \"popularity\": 115.327,\n        \"voteCount\": 27830,\n        \"voteAverage\": 8.49,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/suaEOtk1N1sgg2MTM7oZd2cfVp3.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            53,\n            80\n        ],\n        \"id\": 680\n    },\n    {\n        \"title\": \"True Lies\",\n        \"originalTitle\": \"True Lies\",\n        \"releaseDate\": \"1994-07-15\",\n        \"overview\": \"A fearless, globe-trotting, terrorist-battling secret agent has his life turned upside down when he discovers his wife might be having an affair with a used car salesman while terrorists smuggle nuclear war heads into the United States.\",\n        \"popularity\": 27.72,\n        \"voteCount\": 4057,\n        \"voteAverage\": 7.08,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/jRZ3joUcg8YDCQYl4Tog5xhY6wk.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/pweFTnzzTfGK68woSVkiTgjLzWm.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            28,\n            53\n        ],\n        \"id\": 36955\n    },\n    {\n        \"title\": \"Forrest Gump\",\n        \"originalTitle\": \"Forrest Gump\",\n        \"releaseDate\": \"1994-06-23\",\n        \"overview\": \"A man with a low IQ has accomplished great things in his life and been present during significant historic events—in each case, far exceeding what anyone imagined he could do. But despite all he has achieved, his one true love eludes him.\",\n        \"popularity\": 126.554,\n        \"voteCount\": 27362,\n        \"voteAverage\": 8.47,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/ghgfzbEV7kbpbi1O8eIILKVXEA8.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            18,\n            35,\n            10749\n        ],\n        \"id\": 13\n    },\n    {\n        \"title\": \"Stargate\",\n        \"originalTitle\": \"Stargate\",\n        \"releaseDate\": \"1994-10-28\",\n        \"overview\": \"An interstellar teleportation device, found in Egypt, leads to a planet with humans resembling ancient Egyptians who worship the god Ra.\",\n        \"popularity\": 27.674,\n        \"voteCount\": 3387,\n        \"voteAverage\": 7,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/s2bqHApZlliCuwgyHod0qucrYqZ.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/4T6Po0XnZlevmhfPh3ZfEs5butR.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            12,\n            28,\n            878\n        ],\n        \"id\": 2164\n    },\n    {\n        \"title\": \"Outbreak\",\n        \"originalTitle\": \"Outbreak\",\n        \"releaseDate\": \"1995-03-10\",\n        \"overview\": \"A deadly airborne virus finds its way into the USA and starts killing off people at an epidemic rate. Col. Sam Daniels' job is to stop the virus spreading from a small town, which must be quarantined, and to prevent an over reaction by the White House.\",\n        \"popularity\": 26.674,\n        \"voteCount\": 2224,\n        \"voteAverage\": 6.6,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/yych1GDUoSs4r51o1feBnOn5szq.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/4KymNvlWR0XF0sqX2BWRd9Z3yXR.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            18,\n            28,\n            53,\n            878\n        ],\n        \"id\": 6950\n    },\n    {\n        \"title\": \"The Silence of the Lambs\",\n        \"originalTitle\": \"The Silence of the Lambs\",\n        \"releaseDate\": \"1991-02-14\",\n        \"overview\": \"Clarice Starling is a top student at the FBI's training academy.  Jack Crawford wants Clarice to interview Dr. Hannibal Lecter, a brilliant psychiatrist who is also a violent psychopath, serving life behind bars for various acts of murder and cannibalism.  Crawford believes that Lecter may have insight into a case and that Starling, as an attractive young woman, may be just the bait to draw him out.\",\n        \"popularity\": 22.636,\n        \"voteCount\": 16214,\n        \"voteAverage\": 8.35,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/aYcnDyLMnpKce1FOYUpZrXtgUye.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/uS9m8OBk1A8eM9I042bx8XXpqAq.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            18,\n            53,\n            80\n        ],\n        \"id\": 274\n    },\n    {\n        \"title\": \"Die Hard: With a Vengeance\",\n        \"originalTitle\": \"Die Hard: With a Vengeance\",\n        \"releaseDate\": \"1995-05-19\",\n        \"overview\": \"New York detective John McClane is back and kicking bad-guy butt in the third installment of this action-packed series, which finds him teaming with civilian Zeus Carver to prevent the loss of innocent lives. McClane thought he'd seen it all, until a genius named Simon engages McClane, his new \\\"partner\\\" -- and his beloved city -- in a deadly game that demands their concentration.\",\n        \"popularity\": 39.522,\n        \"voteCount\": 6020,\n        \"voteAverage\": 7.27,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/fBvSfLetWlAMevQVHa0nBDV1Fon.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/skdHpVja0uRNKVVN9ksviI86I4z.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            28,\n            53\n        ],\n        \"id\": 1572\n    },\n    {\n        \"title\": \"The Fugitive\",\n        \"originalTitle\": \"The Fugitive\",\n        \"releaseDate\": \"1993-08-06\",\n        \"overview\": \"Wrongfully convicted of murdering his wife and sentenced to death, Richard Kimble escapes from the law in an attempt to find the real killer and clear his name.\",\n        \"popularity\": 39.488,\n        \"voteCount\": 4194,\n        \"voteAverage\": 7.47,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/7WVRxZ7KZmzoHnUkAjnEFT4o6Dw.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/b3rEtLKyOnF89mcK75GXDXdmOEf.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            18,\n            28,\n            53\n        ],\n        \"id\": 5503\n    },\n    {\n        \"title\": \"Interview with the Vampire\",\n        \"originalTitle\": \"Interview with the Vampire\",\n        \"releaseDate\": \"1994-11-11\",\n        \"overview\": \"A vampire relates his epic life story of love, betrayal, loneliness, and dark hunger to an over-curious reporter.\",\n        \"popularity\": 39.549,\n        \"voteCount\": 5797,\n        \"voteAverage\": 7.38,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/3fChciF2G1wXHsyTfJD9y7uN6Il.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/2162lAT2MP36MyJd2sttmj5du5T.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            14,\n            18,\n            27\n        ],\n        \"id\": 628\n    },\n    {\n        \"title\": \"Waterworld\",\n        \"originalTitle\": \"Waterworld\",\n        \"releaseDate\": \"1995-07-28\",\n        \"overview\": \"In a futuristic world where the polar ice caps have melted and made Earth a liquid planet, a beautiful barmaid rescues a mutant seafarer from a floating island prison. They escape, along with her young charge, Enola, and sail off aboard his ship. But the trio soon becomes the target of a menacing pirate who covets the map to 'Dryland'—which is tattooed on Enola's back.\",\n        \"popularity\": 25.402,\n        \"voteCount\": 3650,\n        \"voteAverage\": 6.2,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/yaIu82UiD9QZEkKCGrAd8VAmc0V.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/f4Q6BKm1lv9u5xoffbIIwrOYf6z.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            12,\n            28,\n            878\n        ],\n        \"id\": 9804\n    },\n    {\n        \"title\": \"Batman\",\n        \"originalTitle\": \"Batman\",\n        \"releaseDate\": \"1989-06-21\",\n        \"overview\": \"Batman must face his most ruthless nemesis when a deformed madman calling himself \\\"The Joker\\\" seizes control of Gotham's criminal underworld.\",\n        \"popularity\": 44.867,\n        \"voteCount\": 7793,\n        \"voteAverage\": 7.2,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/2va32apQP97gvUxaMnL5wYt4CRB.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/cij4dd21v2Rk2YtUQbV5kW69WB2.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            14,\n            28,\n            80\n        ],\n        \"id\": 268\n    },\n    {\n        \"title\": \"Aladdin\",\n        \"originalTitle\": \"Aladdin\",\n        \"releaseDate\": \"1992-11-25\",\n        \"overview\": \"Princess Jasmine grows tired of being forced to remain in the palace, so she sneaks out into the marketplace, in disguise, where she meets street urchin Aladdin. The couple falls in love, although Jasmine may only marry a prince. After being thrown in jail, Aladdin becomes embroiled in a plot to find a mysterious lamp, with which the evil Jafar hopes to rule the land.\",\n        \"popularity\": 58.296,\n        \"voteCount\": 11173,\n        \"voteAverage\": 7.65,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/nenJjvfe2Eq8uBMXFJnWj5mw4bi.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/eLFfl7vS8dkeG1hKp5mwbm37V83.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            12,\n            14,\n            16,\n            10749,\n            10751\n        ],\n        \"id\": 812\n    },\n    {\n        \"title\": \"Apollo 13\",\n        \"originalTitle\": \"Apollo 13\",\n        \"releaseDate\": \"1995-06-30\",\n        \"overview\": \"The true story of technical troubles that scuttle the Apollo 13 lunar mission in 1970, risking the lives of astronaut Jim Lovell and his crew, with the failed journey turning into a thrilling saga of heroism. Drifting more than 200,000 miles from Earth, the astronauts work furiously with the ground crew to avert tragedy.\",\n        \"popularity\": 26.883,\n        \"voteCount\": 5353,\n        \"voteAverage\": 7.4,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/pcSjQftPIflB8pSy0g41oSktp6N.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/kzj95o9FlVxKziQq36mjES3wxel.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            18,\n            36\n        ],\n        \"id\": 568\n    },\n    {\n        \"title\": \"Disclosure\",\n        \"originalTitle\": \"Disclosure\",\n        \"releaseDate\": \"1994-12-09\",\n        \"overview\": \"A computer specialist is sued for sexual harassment by a former lover turned boss who initiated the act forcefully, which threatens both his career and his personal life.\",\n        \"popularity\": 14.368,\n        \"voteCount\": 1153,\n        \"voteAverage\": 6.26,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/4A0f1oqkJLohy8LXjmJpops7CMB.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/dnA4QkIZZCF9wRtF8HHxWwUXVMf.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            18,\n            53,\n            80\n        ],\n        \"id\": 8984\n    },\n    {\n        \"title\": \"The Net\",\n        \"originalTitle\": \"The Net\",\n        \"releaseDate\": \"1995-07-28\",\n        \"overview\": \"Angela Bennett is a freelance computer systems analyst who tracks down software viruses. At night she hooks up to the internet and chats to others 'surfing the net'. While de-bugging a new high-tech game for a cyber friend, she comes across a top secret program and becomes the target of a mysterious organization who will stop at nothing to erase her identity and her existence, in order to protect the project.\",\n        \"popularity\": 12.767,\n        \"voteCount\": 1331,\n        \"voteAverage\": 6.02,\n        \"originalLanguage\": \"en\",\n        \"backdropPath\": \"https://image.tmdb.org/t/p/w500/hPlL6FjbbZGZNfNaBePhOXSB9WY.jpg\",\n        \"posterPath\": \"https://image.tmdb.org/t/p/w500/dtupntUFMD5iXBo8HLfALt2ET4R.jpg\",\n        \"adult\": false,\n        \"video\": false,\n        \"genreIds\": [\n            18,\n            28,\n            53,\n            80,\n            9648\n        ],\n        \"id\": 1642\n    }\n]"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"user1\",\n    \"email\": \"user1@gmail.com\",\n    \"password\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}:{{auth-port}}/api/v1/auth/register",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{auth-port}}",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "users",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\":\"test\",\n    \"email\": \"test@gmail.com\",\n    \"password\": \"qwerty\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/auth/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "Authentication=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEsImlhdCI6MTczMDI5NTQ0OCwiZXhwIjoxNzMwMjk5MDQ4fQ.IVH1RX7_fYFQvxtGkbYhs7nxG5ZFjn-_40A_JzOUh_U; Max-Age=18000; Path=/; Expires=Wed, 30 Oct 2024 18:37:28 GMT; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "91"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"5b-9m4obOFBnxMEDOO4Wf6HzWsq85I\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 30 Oct 2024 13:37:28 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"username\": \"test\",\n    \"email\": \"test@gmail.com\",\n    \"created_at\": \"2024-10-30T13:37:28.685Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user1@gmail.com\",\n    \"password\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}:{{auth-port}}/api/v1/auth/login",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{auth-port}}",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"password\": \"qwerty\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/auth/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "Authentication=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEsImlhdCI6MTczMDI5NTY3MywiZXhwIjoxNzMwMjk5MjczfQ.NA-m_5CpMVX0T3gWAtmssLMsVyqxJfshY5wtacnuLfc; Max-Age=18000; Path=/; Expires=Wed, 30 Oct 2024 18:41:13 GMT; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "91"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"5b-9m4obOFBnxMEDOO4Wf6HzWsq85I\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 30 Oct 2024 13:41:13 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"username\": \"test\",\n    \"email\": \"test@gmail.com\",\n    \"created_at\": \"2024-10-30T13:37:28.685Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"password\": \"qwerty\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}:{{auth-port}}/api/v1/auth/logout",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{auth-port}}",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "logout",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"password\": \"qwerty\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/auth/logout",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "Authentication=; Max-Age=0; Path=/; HttpOnly"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 30 Oct 2024 13:42:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "me",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}:{{auth-port}}/api/v1/auth/me",
+							"host": [
+								"{{domain}}"
+							],
+							"port": "{{auth-port}}",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"me"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "me",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/auth/me",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"me"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "165"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"a5-4Lit4fKZGIZShk8/POzUNvk0Isg\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 30 Oct 2024 13:42:03 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"username\": \"test\",\n    \"email\": \"test@gmail.com\",\n    \"password\": \"$2b$10$afeBZIHKV0G0yoXwGSc26e7q/Pk1QEvVPrW0JBmPjQFaJ8lvr0qTu\",\n    \"created_at\": \"2024-10-30T13:37:28.685Z\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "greet",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8081/api/greet?name=brij",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"greet"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "brij"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "rec-port",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "movie-port",
+			"value": ""
+		},
+		{
+			"key": "domain",
+			"value": ""
+		},
+		{
+			"key": "auth-port",
+			"value": ""
+		}
+	]
+}
