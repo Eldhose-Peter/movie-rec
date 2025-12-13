@@ -1,5 +1,6 @@
 package com.example.movie_service.controller;
 
+import com.example.movie_service.model.GenreMap;
 import com.example.movie_service.model.Movie;
 import com.example.movie_service.service.MovieFacade;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class MovieController {
 
     private final MovieFacade movieFacade;
@@ -28,7 +29,7 @@ public class MovieController {
      * - sort optional column (popularity|vote_average|release_date|title). default "id"
      * - desc optional boolean (true for descending)
      */
-    @GetMapping("/movies")
+    @GetMapping("/movies/popular")
     public ResponseEntity<List<Movie>> listMovies(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "20") int size,
@@ -43,7 +44,7 @@ public class MovieController {
     }
 
 
-    @GetMapping("/users/{userId}/recommend")
+    @GetMapping("/movies/recommend/{userId}")
     public ResponseEntity<List<Movie>> getRecommendedMovies(
             @PathVariable String userId,
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -59,5 +60,20 @@ public class MovieController {
         List<Movie> list = movieFacade.recommend(userId, genreIds, yearGte, yearLte, ratingGte, page, safeSize, sort);
         return ResponseEntity.ok(list);
     }
+
+    @GetMapping("/movies")
+    public ResponseEntity<List<Movie>> getBatchMoviesByIds(
+            @RequestParam(name = "ids") List<Integer> ids
+    ) {
+        List<Movie> list = movieFacade.getByIds(ids);
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/movies/genres")
+    public ResponseEntity<List<GenreMap>> getGenreMapping() {
+        List<GenreMap> list = movieFacade.getGenreMapping();
+        return ResponseEntity.ok(list);
+    }
+
 
 }

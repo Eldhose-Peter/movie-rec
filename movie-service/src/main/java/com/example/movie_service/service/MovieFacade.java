@@ -3,6 +3,7 @@ package com.example.movie_service.service;
 
 import com.example.movie_service.Recommendation;
 import com.example.movie_service.grpc.RecommendationGrpcClient;
+import com.example.movie_service.model.GenreMap;
 import com.example.movie_service.model.Movie;
 import com.example.movie_service.repository.MovieRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -66,4 +67,11 @@ public class MovieFacade {
         return candidates.stream().filter(filters).sorted(sorter).skip((long) page * safeSize).limit(safeSize).collect(Collectors.toList());
     }
 
+    public List<Movie> getByIds(List<Integer> ids) {
+        return repo.findByIds(ids);
+    }
+
+    public List<GenreMap> getGenreMapping() {
+        return repo.getGenreMappings();
+    }
 }

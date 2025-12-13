@@ -1,5 +1,6 @@
 package com.example.movie_service.repository;
 
+import com.example.movie_service.model.GenreMap;
 import com.example.movie_service.model.Movie;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -118,6 +119,11 @@ public class MovieRepository {
         params.put("ids", ids);
 
         return jdbc.query(baseSql, params, MOVIE_MAPPER);
+    }
+
+    public List<GenreMap> getGenreMappings() {
+        String sql = "SELECT id, name FROM genres ORDER BY id";
+        return jdbc.query(sql, (rs, rowNum) -> new GenreMap(rs.getInt("id"), rs.getString("name")));
     }
 
 }
