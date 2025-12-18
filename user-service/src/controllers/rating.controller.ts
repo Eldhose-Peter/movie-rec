@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { queueService } from "services/queue.service";
 import { RatingService } from "services/rating.service";
 import { CreateRatingPayload } from "validation/rating.validation";
 
@@ -11,6 +12,11 @@ class RatingController {
       const userId = req.userId as number;
 
       const createdRating = await this.ratingService.createRating(userId, payload);
+
+      // 2. Emit Event to RabbitMQ
+      // We don't await this if we want fire-and-forget,
+      // or we await if we want to ensure it reached the broker.
+      await queueService.publishRating(userId, payload.movieId, payload.rating);
       res.status(201).json(createdRating);
     } catch (error) {
       next(error);
