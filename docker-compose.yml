@@ -89,6 +89,10 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/recommendation_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
 
   movie-service:
     build:
@@ -134,6 +138,7 @@ services:
       PORT: 3000
       JWT_SECRET: your_jwt_secret_key
       FRONTEND_URL: http://localhost:4200
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
 
   prometheus:
     image: prom/prometheus

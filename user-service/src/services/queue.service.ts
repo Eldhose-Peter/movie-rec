@@ -3,7 +3,7 @@ import amqp, { Channel, ChannelModel } from "amqplib";
 class QueueService {
   private connection: ChannelModel | null = null;
   private channel: Channel | null = null;
-  private readonly queueUrl = "amqp://guest:guest@rabbitmq:5672";
+  private readonly queueUrl = process.env.RABBITMQ_URL || "amqp://guest:guest@localhost:5672";
   private readonly exchangeName = "rating.exchange";
 
   async connect() {

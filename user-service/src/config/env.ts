@@ -13,5 +13,7 @@ export const env = cleanEnv(process.env, {
   PORT: port({ default: 5000 }),
 
   JWT_SECRET: str(),
-  FRONTEND_URL: url()
+  FRONTEND_URL: url(),
+
+  RABBITMQ_URL: url({ default: "amqp://guest:guest@rabbitmq:5672" })
 });
