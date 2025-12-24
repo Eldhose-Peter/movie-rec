@@ -1,6 +1,6 @@
 package com.example.recommendation.service;
 
-import com.example.recommendation.model.RatingEvent;
+import com.example.recommendation.model.ImdbRatingEvent;
 import com.example.recommendation.model.SimilarItem;
 import com.example.recommendation.repository.RatingRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +55,7 @@ public class RaterSimilarityStreamService {
 
         // Load current rater’s ratings into memory once
         Map<Integer, Double> currentRatingsMap = ratingRepository.findById_RaterId(currentRaterId).stream()
-                .collect(Collectors.toMap(RatingEvent::getMovieId, r -> r.getRating() - 5));
+                .collect(Collectors.toMap(ImdbRatingEvent::getMovieId, r -> r.getRating() - 5));
 
         if (currentRatingsMap.isEmpty()) {
             log.warn("No ratings found for rater {}", currentRaterId);
@@ -67,8 +67,8 @@ public class RaterSimilarityStreamService {
         // PriorityQueue (min-heap) for top-N similarities
         PriorityQueue<SimilarItem> topSimilar = new PriorityQueue<>(Comparator.comparing(SimilarItem::getSimilarity));
 
-        try (Stream<RatingEvent> stream = ratingRepository.streamAllExcept(currentRaterId)) {
-            Map<Integer, List<RatingEvent>> grouped = new HashMap<>();
+        try (Stream<ImdbRatingEvent> stream = ratingRepository.streamAllExcept(currentRaterId)) {
+            Map<Integer, List<ImdbRatingEvent>> grouped = new HashMap<>();
 
             stream.forEach(rating -> {
                 grouped.computeIfAbsent(rating.getRaterId(), k -> new ArrayList<>()).add(rating);
@@ -94,15 +94,15 @@ public class RaterSimilarityStreamService {
         return result;
     }
 
-    private void processBatch(Map<Integer, List<RatingEvent>> batch,
+    private void processBatch(Map<Integer, List<ImdbRatingEvent>> batch,
                               Map<Integer, Double> currentRatingsMap,
                               PriorityQueue<SimilarItem> topSimilar) {
-        for (Map.Entry<Integer, List<RatingEvent>> entry : batch.entrySet()) {
+        for (Map.Entry<Integer, List<ImdbRatingEvent>> entry : batch.entrySet()) {
             Integer otherRaterId = entry.getKey();
-            List<RatingEvent> otherRatings = entry.getValue();
+            List<ImdbRatingEvent> otherRatings = entry.getValue();
 
             double dot = 0.0;
-            for (RatingEvent rating : otherRatings) {
+            for (ImdbRatingEvent rating : otherRatings) {
                 Double cur = currentRatingsMap.get(rating.getMovieId());
                 if (cur != null) {
                     dot += cur * (rating.getRating() - 5);

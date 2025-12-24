@@ -1,21 +1,25 @@
 package com.example.recommendation.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "ratings")
+@MappedSuperclass
 @Getter
-public class RatingEvent {
+@Setter
+public class BaseRatingEvent {
     @EmbeddedId
     private final RatingId id;
     private final Double rating;
     @Column(name = "time")
     private LocalDateTime timestamp;
 
-    public RatingEvent(Integer raterId, Integer movieId, Double rating){
+    public BaseRatingEvent(Integer raterId, Integer movieId, Double rating){
         this.id = new RatingId(raterId,movieId);
         this.rating = rating;
     }
@@ -30,5 +34,4 @@ public class RatingEvent {
     public Integer getRaterId() {
         return id.getRaterId();
     }
-
 }

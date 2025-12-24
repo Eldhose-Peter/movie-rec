@@ -1,6 +1,6 @@
 package com.example.recommendation.service;
 
-import com.example.recommendation.model.RatingEvent;
+import com.example.recommendation.model.ImdbRatingEvent;
 import com.example.recommendation.model.SimilarItem;
 import com.example.recommendation.repository.RatingRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -32,16 +32,16 @@ public class RaterSimilarityTopNService {
 
     public List<SimilarItem> getTopNSimilarRaters(Integer currentRaterId){
         log.info("Fetching all ratings from DB");
-        List<RatingEvent> allRatings = ratingRepository.findAll(); // single query
+        List<ImdbRatingEvent> allRatings = ratingRepository.findAll(); // single query
 
         // Group ratings by raterId
-        Map<Integer, List<RatingEvent>> ratingsByRater = allRatings.stream()
-                .collect(Collectors.groupingBy(RatingEvent::getRaterId));
+        Map<Integer, List<ImdbRatingEvent>> ratingsByRater = allRatings.stream()
+                .collect(Collectors.groupingBy(ImdbRatingEvent::getRaterId));
 
         // Get current rater ratings
-        List<RatingEvent> currentRatings = ratingsByRater.getOrDefault(currentRaterId, Collections.emptyList());
+        List<ImdbRatingEvent> currentRatings = ratingsByRater.getOrDefault(currentRaterId, Collections.emptyList());
         Map<Integer, Double> currentRatingsMap = currentRatings.stream()
-                .collect(Collectors.toMap(RatingEvent::getMovieId, r -> r.getRating() - 5));
+                .collect(Collectors.toMap(ImdbRatingEvent::getMovieId, r -> r.getRating() - 5));
 
         // Min-heap to store top-N similar raters efficiently
         PriorityQueue<SimilarItem> topSimilar = new PriorityQueue<>(Comparator.comparing(SimilarItem::getSimilarity));
@@ -51,10 +51,10 @@ public class RaterSimilarityTopNService {
                 .filter(entry -> !entry.getKey().equals(currentRaterId))
                 .forEach(entry -> {
                     Integer otherRaterId = entry.getKey();
-                    List<RatingEvent> otherRatings = entry.getValue();
+                    List<ImdbRatingEvent> otherRatings = entry.getValue();
 
                     Map<Integer, Double> otherRatingsMap = otherRatings.stream()
-                            .collect(Collectors.toMap(RatingEvent::getMovieId, r -> r.getRating() - 5));
+                            .collect(Collectors.toMap(ImdbRatingEvent::getMovieId, r -> r.getRating() - 5));
 
                     double dot = 0.0;
                     for (Map.Entry<Integer, Double> e : currentRatingsMap.entrySet()) {

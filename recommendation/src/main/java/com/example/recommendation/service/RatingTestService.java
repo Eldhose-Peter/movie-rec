@@ -1,7 +1,7 @@
 package com.example.recommendation.service;
 
 import com.example.recommendation.model.DatabaseDetails;
-import com.example.recommendation.model.RatingEvent;
+import com.example.recommendation.model.ImdbRatingEvent;
 import com.example.recommendation.repository.RatingRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +19,11 @@ public class RatingTestService {
         return ratingRepository.getUniqueRaterIds();
     }
 
-    public List<RatingEvent> getRatingsByUser(Integer raterId) {
+    public List<ImdbRatingEvent> getRatingsByUser(Integer raterId) {
         return ratingRepository.findById_RaterId(raterId);
     }
 
-    public RatingEvent getRatingForMovieByUser(Integer movieId, Integer raterId) {
+    public ImdbRatingEvent getRatingForMovieByUser(Integer movieId, Integer raterId) {
         return ratingRepository.findById_RaterIdAndId_MovieId(raterId, movieId);
     }
 

@@ -1,6 +1,6 @@
 package com.example.recommendation.repository;
 
-import com.example.recommendation.model.RatingEvent;
+import com.example.recommendation.model.ImdbRatingEvent;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
@@ -8,37 +8,36 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
-import java.util.Optional;
 
-public interface RatingRepository extends Repository<RatingEvent, Long> {
-    @Query("SELECT DISTINCT r.id.movieId FROM RatingEvent r")
+public interface RatingRepository extends Repository<ImdbRatingEvent, Long> {
+    @Query("SELECT DISTINCT r.id.movieId FROM ImdbRatingEvent r")
     List<Integer> getUniqueMovieIds();
 
-    @Query("SELECT DISTINCT r.id.raterId FROM RatingEvent r")
+    @Query("SELECT DISTINCT r.id.raterId FROM ImdbRatingEvent r")
     List<Integer> getUniqueRaterIds();
 
-    List<RatingEvent> findAll();
+    List<ImdbRatingEvent> findAll();
 
-    List<RatingEvent> findById_RaterId(Integer raterId);
+    List<ImdbRatingEvent> findById_RaterId(Integer raterId);
 
-    @Query("SELECT r FROM RatingEvent r WHERE r.id.raterId IN :raterIds")
-    List<RatingEvent> findByRaterIds(@Param("raterIds") Set<Integer> raterIds);
+    @Query("SELECT r FROM ImdbRatingEvent r WHERE r.id.raterId IN :raterIds")
+    List<ImdbRatingEvent> findByRaterIds(@Param("raterIds") Set<Integer> raterIds);
 
 
-    RatingEvent findById_RaterIdAndId_MovieId(Integer raterId, Integer movieId);
+    ImdbRatingEvent findById_RaterIdAndId_MovieId(Integer raterId, Integer movieId);
 
-    @Query(value = "SELECT r FROM RatingEvent r ORDER BY r.id.raterId OFFSET :offset LIMIT :limit", nativeQuery = true)
-    List<RatingEvent> findBatch(@Param("offset") int offset, @Param("limit") int limit);
+    @Query(value = "SELECT r FROM ImdbRatingEvent r ORDER BY r.id.raterId OFFSET :offset LIMIT :limit", nativeQuery = true)
+    List<ImdbRatingEvent> findBatch(@Param("offset") int offset, @Param("limit") int limit);
 
-    @Query("SELECT r FROM RatingEvent r WHERE r.id.raterId <> :currentRaterId ORDER BY r.id.raterId")
-    Stream<RatingEvent> streamAllExcept(@Param("currentRaterId") Integer currentRaterId);
+    @Query("SELECT r FROM ImdbRatingEvent r WHERE r.id.raterId <> :currentRaterId ORDER BY r.id.raterId")
+    Stream<ImdbRatingEvent> streamAllExcept(@Param("currentRaterId") Integer currentRaterId);
 
-    @Query("SELECT COUNT(r) FROM RatingEvent r")
+    @Query("SELECT COUNT(r) FROM ImdbRatingEvent r")
     Long getTotalRatings();
 
-    @Query("SELECT COUNT(DISTINCT r.id.movieId) FROM RatingEvent r")
+    @Query("SELECT COUNT(DISTINCT r.id.movieId) FROM ImdbRatingEvent r")
     Long getTotalMovies();
 
-    @Query("SELECT COUNT(DISTINCT r.id.raterId) FROM RatingEvent r")
+    @Query("SELECT COUNT(DISTINCT r.id.raterId) FROM ImdbRatingEvent r")
     Long getTotalUsers();
 }

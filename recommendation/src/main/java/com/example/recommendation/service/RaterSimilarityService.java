@@ -1,6 +1,6 @@
 package com.example.recommendation.service;
 
-import com.example.recommendation.model.RatingEvent;
+import com.example.recommendation.model.ImdbRatingEvent;
 import com.example.recommendation.model.SimilarItem;
 import com.example.recommendation.repository.RatingRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -75,19 +75,19 @@ public class RaterSimilarityService {
     private Double dotProduct(Integer curRater, Integer otherRater) {
         log.info("Calculating dotProduct for" + curRater + " x " + otherRater);
         // Fetch ratings from repository
-        List<RatingEvent> curUserRatings = ratingRepository.findById_RaterId(curRater);
-        List<RatingEvent> otherUserRatings = ratingRepository.findById_RaterId(otherRater);
+        List<ImdbRatingEvent> curUserRatings = ratingRepository.findById_RaterId(curRater);
+        List<ImdbRatingEvent> otherUserRatings = ratingRepository.findById_RaterId(otherRater);
 
         log.info("current user ratings : "+ curUserRatings.size());
         log.info("other user ratings : "+ otherUserRatings.size());
 
         // Map movieId -> rating for efficient lookup
         Map<Integer, Double> otherRatingsMap = otherUserRatings.stream()
-                .collect(Collectors.toMap(RatingEvent::getMovieId, RatingEvent::getRating));
+                .collect(Collectors.toMap(ImdbRatingEvent::getMovieId, ImdbRatingEvent::getRating));
 
         Double dotProduct = 0.0;
 
-        for (RatingEvent rating : curUserRatings) {
+        for (ImdbRatingEvent rating : curUserRatings) {
             Double curRating = rating.getRating();
             Double otherRating = otherRatingsMap.get(rating.getMovieId());
 

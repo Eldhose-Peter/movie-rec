@@ -1,8 +1,7 @@
 package com.example.recommendation.batch.step5;
 
-import com.example.recommendation.batch.step4.RatingsPrefetchListener;
 import com.example.recommendation.model.MovieWeightContribution;
-import com.example.recommendation.model.RatingEvent;
+import com.example.recommendation.model.ImdbRatingEvent;
 import com.example.recommendation.model.UserSimilarity;
 import com.example.recommendation.repository.RatingRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -29,14 +28,14 @@ public class MovieSimilarityProcessor {
             double similarity = candidate.getSimilarityScore();
 
             // cached or loaded on demand
-            Map<Integer, List<RatingEvent>> ratingsCache = prefetchListener.getRatingsCache();
-            List<RatingEvent> ratings1 = ratingsCache.getOrDefault(r1Id, List.of());
-            List<RatingEvent> ratings2 = ratingsCache.getOrDefault(r2Id, List.of());
+            Map<Integer, List<ImdbRatingEvent>> ratingsCache = prefetchListener.getRatingsCache();
+            List<ImdbRatingEvent> ratings1 = ratingsCache.getOrDefault(r1Id, List.of());
+            List<ImdbRatingEvent> ratings2 = ratingsCache.getOrDefault(r2Id, List.of());
 
             // for each movie not watched by rater1,
             // calculate the weighted rating by multiplying with rater closeness
             Set<Integer> ratedByRater1 = ratings1.stream()
-                    .map(RatingEvent::getMovieId)
+                    .map(ImdbRatingEvent::getMovieId)
                     .collect(Collectors.toSet());
 
             // Only movies rated by other user but not current rater

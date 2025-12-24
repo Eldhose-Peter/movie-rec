@@ -1,6 +1,6 @@
 package com.example.recommendation.service;
 
-import com.example.recommendation.model.RatingEvent;
+import com.example.recommendation.model.ImdbRatingEvent;
 import com.example.recommendation.model.SimilarItem;
 import com.example.recommendation.repository.RatingRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class RaterSimilarityStreamService2 {
         log.info("Fetching ratings for current rater {}", currentRaterId);
 
         Map<Integer, Double> currentRatingsMap = ratingRepository.findById_RaterId(currentRaterId).stream()
-                .collect(Collectors.toMap(RatingEvent::getMovieId, r -> r.getRating() - 5));
+                .collect(Collectors.toMap(ImdbRatingEvent::getMovieId, r -> r.getRating() - 5));
 
         if (currentRatingsMap.isEmpty()) {
             log.warn("No ratings found for rater {}", currentRaterId);
@@ -40,12 +40,12 @@ public class RaterSimilarityStreamService2 {
 
         PriorityQueue<SimilarItem> topSimilar = new PriorityQueue<>(Comparator.comparing(SimilarItem::getSimilarity));
 
-        try (Stream<RatingEvent> stream = ratingRepository.streamAllExcept(currentRaterId)) {
-            List<RatingEvent> buffer = new ArrayList<>();
+        try (Stream<ImdbRatingEvent> stream = ratingRepository.streamAllExcept(currentRaterId)) {
+            List<ImdbRatingEvent> buffer = new ArrayList<>();
             Integer lastRater = null;
 
-            for (Iterator<RatingEvent> it = stream.iterator(); it.hasNext();) {
-                RatingEvent rating = it.next();
+            for (Iterator<ImdbRatingEvent> it = stream.iterator(); it.hasNext();) {
+                ImdbRatingEvent rating = it.next();
                 if (lastRater == null) {
                     lastRater = rating.getRaterId();
                 }
@@ -72,11 +72,11 @@ public class RaterSimilarityStreamService2 {
     }
 
     private void processSingleRater(Integer raterId,
-                                    List<RatingEvent> ratings,
+                                    List<ImdbRatingEvent> ratings,
                                     Map<Integer, Double> currentRatingsMap,
                                     PriorityQueue<SimilarItem> topSimilar) {
         double dot = 0.0;
-        for (RatingEvent rating : ratings) {
+        for (ImdbRatingEvent rating : ratings) {
             Double cur = currentRatingsMap.get(rating.getMovieId());
             if (cur != null) {
                 dot += cur * (rating.getRating() - 5);

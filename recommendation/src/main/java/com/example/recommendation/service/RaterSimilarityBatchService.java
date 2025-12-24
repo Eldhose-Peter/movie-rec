@@ -1,6 +1,6 @@
 package com.example.recommendation.service;
 
-import com.example.recommendation.model.RatingEvent;
+import com.example.recommendation.model.ImdbRatingEvent;
 import com.example.recommendation.model.SimilarItem;
 import com.example.recommendation.repository.RatingRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -42,14 +42,14 @@ public class RaterSimilarityBatchService {
         log.info("Fetching ratings for current rater {}", currentRaterId);
 
         // Load only current rater ratings once
-        List<RatingEvent> currentRatings = ratingRepository.findById_RaterId(currentRaterId);
+        List<ImdbRatingEvent> currentRatings = ratingRepository.findById_RaterId(currentRaterId);
         if (currentRatings.isEmpty()) {
             log.warn("No ratings found for rater {}", currentRaterId);
             return Collections.emptyList();
         }
 
         Map<Integer, Double> currentRatingsMap = currentRatings.stream()
-                .collect(Collectors.toMap(RatingEvent::getMovieId, r -> r.getRating() - 5));
+                .collect(Collectors.toMap(ImdbRatingEvent::getMovieId, r -> r.getRating() - 5));
 
         log.info("Loaded {} ratings for current rater", currentRatingsMap.size());
 
@@ -59,23 +59,23 @@ public class RaterSimilarityBatchService {
         int offset = 0;
         while (true) {
             // Fetch batch of ratings
-            List<RatingEvent> batchRatings = ratingRepository.findBatch(offset, BATCH_SIZE);
+            List<ImdbRatingEvent> batchRatings = ratingRepository.findBatch(offset, BATCH_SIZE);
             if (batchRatings.isEmpty()) {
                 break; // no more data
             }
 
             // Group ratings by raterId inside batch
-            Map<Integer, List<RatingEvent>> batchGrouped = batchRatings.stream()
+            Map<Integer, List<ImdbRatingEvent>> batchGrouped = batchRatings.stream()
                     .filter(r -> !r.getRaterId().equals(currentRaterId)) // skip current rater
-                    .collect(Collectors.groupingBy(RatingEvent::getRaterId));
+                    .collect(Collectors.groupingBy(ImdbRatingEvent::getRaterId));
 
             // Compute similarity for each rater in the batch
-            for (Map.Entry<Integer, List<RatingEvent>> entry : batchGrouped.entrySet()) {
+            for (Map.Entry<Integer, List<ImdbRatingEvent>> entry : batchGrouped.entrySet()) {
                 Integer otherRaterId = entry.getKey();
-                List<RatingEvent> otherRatings = entry.getValue();
+                List<ImdbRatingEvent> otherRatings = entry.getValue();
 
                 double dot = 0.0;
-                for (RatingEvent rating : otherRatings) {
+                for (ImdbRatingEvent rating : otherRatings) {
                     Double curRating = currentRatingsMap.get(rating.getMovieId());
                     if (curRating != null) {
                         dot += curRating * (rating.getRating() - 5);

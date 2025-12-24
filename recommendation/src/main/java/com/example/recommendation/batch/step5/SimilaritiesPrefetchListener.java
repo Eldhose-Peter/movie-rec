@@ -1,6 +1,6 @@
 package com.example.recommendation.batch.step5;
 
-import com.example.recommendation.model.RatingEvent;
+import com.example.recommendation.model.ImdbRatingEvent;
 import com.example.recommendation.model.UserSimilarity;
 import com.example.recommendation.repository.RatingJdbcRepository;
 import lombok.Getter;
@@ -26,7 +26,7 @@ public class SimilaritiesPrefetchListener implements ItemReadListener<UserSimila
     private final RatingJdbcRepository ratingRepository;
 
     @Getter
-    private final Map<Integer, List<RatingEvent>> ratingsCache = new ConcurrentHashMap<>();
+    private final Map<Integer, List<ImdbRatingEvent>> ratingsCache = new ConcurrentHashMap<>();
 
     public SimilaritiesPrefetchListener(RatingJdbcRepository ratingRepository) {
         this.ratingRepository = ratingRepository;
@@ -61,7 +61,7 @@ public class SimilaritiesPrefetchListener implements ItemReadListener<UserSimila
         ratingsCache.clear();
         long start =  System.currentTimeMillis();
         if (!currentRaters.isEmpty()) {
-            Map<Integer, List<RatingEvent>> fetched = ratingRepository.getRatingsForRaters(currentRaters);
+            Map<Integer, List<ImdbRatingEvent>> fetched = ratingRepository.getRatingsForRaters(currentRaters);
 
             ratingsCache.putAll(fetched);
         }

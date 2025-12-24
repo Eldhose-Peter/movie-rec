@@ -1,6 +1,6 @@
 package com.example.recommendation.service;
 
-import com.example.recommendation.model.RatingEvent;
+import com.example.recommendation.model.ImdbRatingEvent;
 import com.example.recommendation.model.SimilarItem;
 import com.example.recommendation.repository.RatingRepository;
 import org.springframework.stereotype.Service;
@@ -70,7 +70,7 @@ public class WeightedRatingService {
             }
 
 
-            RatingEvent movieRatings = this.ratingRepository.findById_RaterIdAndId_MovieId(movieId, raterId);
+            ImdbRatingEvent movieRatings = this.ratingRepository.findById_RaterIdAndId_MovieId(movieId, raterId);
 
             if (movieRatings!=null) {
                 double weightedRating = raterCloseness * movieRatings.getRating();

@@ -1,6 +1,6 @@
 package com.example.recommendation.service;
 
-import com.example.recommendation.model.RatingEvent;
+import com.example.recommendation.model.ImdbRatingEvent;
 import com.example.recommendation.model.UserSignature;
 import com.example.recommendation.repository.RatingRepository;
 import com.example.recommendation.service.lsh.CandidateGenerator;
@@ -31,18 +31,18 @@ public class UserSimilarityApproxService {
     public void generateSimilarity(){
 
         log.info("Collectng rating infor from DB");
-        List<RatingEvent> allRatings = ratingRepository.findAll();
+        List<ImdbRatingEvent> allRatings = ratingRepository.findAll();
 
         log.info("Creating a mapping of raters");
 
-        Map<Integer, List<RatingEvent>> ratingsByRater = allRatings.stream()
-                .collect(Collectors.groupingBy(RatingEvent::getRaterId));
+        Map<Integer, List<ImdbRatingEvent>> ratingsByRater = allRatings.stream()
+                .collect(Collectors.groupingBy(ImdbRatingEvent::getRaterId));
 
         log.info("Building signatures");
         // Step 1: Build signatures
         List<UserSignature> signatures= ratingsByRater.entrySet().stream().map(entry -> {
             int userId = entry.getKey();
-            Set<Integer> movies = entry.getValue().stream().map(RatingEvent::getMovieId).collect(Collectors.toSet());
+            Set<Integer> movies = entry.getValue().stream().map(ImdbRatingEvent::getMovieId).collect(Collectors.toSet());
             int[] sig = minHasher.computeSignature(movies);
             return new UserSignature(userId, sig);
         }).toList();
@@ -64,11 +64,11 @@ public class UserSimilarityApproxService {
             int u1 = Integer.parseInt(ids[0]);
             int u2 = Integer.parseInt(ids[1]);
 
-            List<RatingEvent> userRatings1 = ratingsByRater.get(u1);
-            List<RatingEvent> userRatings2 = ratingsByRater.get(u2);
+            List<ImdbRatingEvent> userRatings1 = ratingsByRater.get(u1);
+            List<ImdbRatingEvent> userRatings2 = ratingsByRater.get(u2);
 
-            Map<Integer, Double> userRatingMap1 = userRatings1.stream().collect(Collectors.toMap(RatingEvent::getMovieId, RatingEvent::getRating));
-            Map<Integer, Double> userRatingMap2 = userRatings2.stream().collect(Collectors.toMap(RatingEvent::getMovieId, RatingEvent::getRating));
+            Map<Integer, Double> userRatingMap1 = userRatings1.stream().collect(Collectors.toMap(ImdbRatingEvent::getMovieId, ImdbRatingEvent::getRating));
+            Map<Integer, Double> userRatingMap2 = userRatings2.stream().collect(Collectors.toMap(ImdbRatingEvent::getMovieId, ImdbRatingEvent::getRating));
 
 
             double sim = Similarity.cosine(userRatingMap1, userRatingMap2);

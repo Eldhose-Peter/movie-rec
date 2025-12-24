@@ -1,6 +1,6 @@
 package com.example.recommendation.batch.step4;
 
-import com.example.recommendation.model.RatingEvent;
+import com.example.recommendation.model.ImdbRatingEvent;
 import com.example.recommendation.model.UserSimilarity;
 import com.example.recommendation.model.UserSimilarityKey;
 import com.example.recommendation.repository.RatingRepository;
@@ -32,17 +32,17 @@ public class UserSimilarityProcessor {
 
             // --- Step 1: Fetch ratings ---
             long fetchStart = System.currentTimeMillis();
-            List<RatingEvent> ratings1 = ratingRepo.findById_RaterId(rater1);
-            List<RatingEvent> ratings2 = ratingRepo.findById_RaterId(rater2);
+            List<ImdbRatingEvent> ratings1 = ratingRepo.findById_RaterId(rater1);
+            List<ImdbRatingEvent> ratings2 = ratingRepo.findById_RaterId(rater2);
             long fetchEnd = System.currentTimeMillis();
 
             // --- Step 2: Build maps ---
             Map<Integer, Double> r1 = new HashMap<>();
-            for (RatingEvent row : ratings1) {
+            for (ImdbRatingEvent row : ratings1) {
                 r1.put(row.getMovieId(), row.getRating());
             }
             Map<Integer, Double> r2 = new HashMap<>();
-            for (RatingEvent row : ratings2) {
+            for (ImdbRatingEvent row : ratings2) {
                 r2.put(row.getMovieId(), row.getRating());
             }
             long mapEnd = System.currentTimeMillis();
@@ -77,8 +77,8 @@ public class UserSimilarityProcessor {
                 .collect(Collectors.groupingBy(
                         r -> r.getId().getRaterId(),
                         Collectors.toMap(
-                                RatingEvent::getMovieId,
-                                RatingEvent::getRating
+                                ImdbRatingEvent::getMovieId,
+                                ImdbRatingEvent::getRating
                         )
                 ));
         log.info("Preloaded all ratings into memory at step start");
@@ -98,7 +98,7 @@ public class UserSimilarityProcessor {
     @StepScope
     public ItemProcessor<UserSimilarityKey, UserSimilarity> similarityLRUCacheProcessor(RatingRepository ratingRepo) {
 
-        Cache<Integer, List<RatingEvent>> ratingCache = Caffeine.newBuilder()
+        Cache<Integer, List<ImdbRatingEvent>> ratingCache = Caffeine.newBuilder()
                 .maximumSize(10_000)               // keep 10k raters in memory
                 .expireAfterAccess(Duration.ofMinutes(20))
                 .recordStats()
@@ -111,14 +111,14 @@ public class UserSimilarityProcessor {
             int r2Id = candidate.getOtherRaterId();
 
             // cached or loaded on demand
-            List<RatingEvent> ratings1 = ratingCache.get(r1Id, ratingRepo::findById_RaterId);
-            List<RatingEvent> ratings2 = ratingCache.get(r2Id, ratingRepo::findById_RaterId);
+            List<ImdbRatingEvent> ratings1 = ratingCache.get(r1Id, ratingRepo::findById_RaterId);
+            List<ImdbRatingEvent> ratings2 = ratingCache.get(r2Id, ratingRepo::findById_RaterId);
 
             Map<Integer, Double> r1 = new HashMap<>();
-            for (RatingEvent r : ratings1) r1.put(r.getMovieId(), r.getRating());
+            for (ImdbRatingEvent r : ratings1) r1.put(r.getMovieId(), r.getRating());
 
             Map<Integer, Double> r2 = new HashMap<>();
-            for (RatingEvent r : ratings2) r2.put(r.getMovieId(), r.getRating());
+            for (ImdbRatingEvent r : ratings2) r2.put(r.getMovieId(), r.getRating());
 
             double sim = Similarity.cosine(r1, r2);
 
@@ -138,16 +138,16 @@ public class UserSimilarityProcessor {
             int r2Id = candidate.getOtherRaterId();
 
             // cached or loaded on demand
-            Map<Integer, List<RatingEvent>> ratingsCache = prefetchListener.getRatingsCache();
-            List<RatingEvent> ratings1 = ratingsCache.getOrDefault(r1Id, List.of());
-            List<RatingEvent> ratings2 = ratingsCache.getOrDefault(r2Id, List.of());
+            Map<Integer, List<ImdbRatingEvent>> ratingsCache = prefetchListener.getRatingsCache();
+            List<ImdbRatingEvent> ratings1 = ratingsCache.getOrDefault(r1Id, List.of());
+            List<ImdbRatingEvent> ratings2 = ratingsCache.getOrDefault(r2Id, List.of());
 
 
             Map<Integer, Double> r1 = new HashMap<>();
-            for (RatingEvent r : ratings1) r1.put(r.getMovieId(), r.getRating());
+            for (ImdbRatingEvent r : ratings1) r1.put(r.getMovieId(), r.getRating());
 
             Map<Integer, Double> r2 = new HashMap<>();
-            for (RatingEvent r : ratings2) r2.put(r.getMovieId(), r.getRating());
+            for (ImdbRatingEvent r : ratings2) r2.put(r.getMovieId(), r.getRating());
 
             double sim = Similarity.dotProduct(r1, r2);
 
