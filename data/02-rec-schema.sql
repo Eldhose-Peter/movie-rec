@@ -13,6 +13,16 @@ CREATE TABLE ratings (
 ALTER TABLE ratings
 ADD CONSTRAINT ratings_rating_check CHECK (rating >= 0 AND rating <= 10); 
 
+CREATE TABLE internal_ratings (
+    rater_id INT,
+    movie_id INT,
+    rating NUMERIC(3, 1) NOT NULL,
+    time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (rater_id, movie_id)
+);
+ALTER TABLE internal_ratings
+ADD CONSTRAINT internal_ratings_rating_check CHECK (rating >= 0 AND rating <= 10);  
+
 -- Create user signature table
 CREATE TABLE user_signature (
     rater_id INT PRIMARY KEY,

@@ -14,7 +14,7 @@ ALTER SEQUENCE users_id_seq RESTART WITH 140000;
 
 
 -- Create the ratings table
-CREATE TABLE ratings (
+CREATE TABLE internal_ratings (
     rater_id INT,
     movie_id INT,
     rating NUMERIC(3, 1) NOT NULL,
