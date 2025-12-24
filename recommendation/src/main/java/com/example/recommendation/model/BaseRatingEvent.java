@@ -5,6 +5,7 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -12,10 +13,11 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Getter
 @Setter
+@NoArgsConstructor
 public class BaseRatingEvent {
     @EmbeddedId
-    private final RatingId id;
-    private final Double rating;
+    private RatingId id;
+    private Double rating;
     @Column(name = "time")
     private LocalDateTime timestamp;
 
