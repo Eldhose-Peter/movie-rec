@@ -40,4 +40,7 @@ public interface RatingRepository extends Repository<ImdbRatingEvent, Long> {
 
     @Query("SELECT COUNT(DISTINCT r.id.raterId) FROM ImdbRatingEvent r")
     Long getTotalUsers();
+
+    @Query("SELECT r FROM ImdbRatingEvent r WHERE r.id.raterId = :raterId")
+    List<ImdbRatingEvent> findByRaterId(Integer raterId);
 }

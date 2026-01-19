@@ -4,6 +4,7 @@ import com.example.recommendation.config.RabbitConfig;
 import com.example.recommendation.model.InternalRatingEvent;
 import com.example.recommendation.model.RatingDTO;
 import com.example.recommendation.repository.InternalRatingRepository;
+import com.example.recommendation.service.IncrementalRecService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RatingEventListener {
 
-    private final InternalRatingRepository ratingRepository;
+    private final IncrementalRecService recommendationService;
 
     @RabbitListener(queues = RabbitConfig.QUEUE_NAME)
     public void handleRatingEvent(RatingDTO message) {
@@ -25,6 +26,8 @@ public class RatingEventListener {
         );
 
         System.out.println("Processing rating from User: " + event.getRaterId());
-        ratingRepository.save(event);
+
+        // hand off to orchestrator to do incremental steps
+        recommendationService.processNewRating(event);
     }
 }
