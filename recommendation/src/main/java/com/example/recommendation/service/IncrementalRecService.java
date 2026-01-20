@@ -21,13 +21,13 @@ import java.util.stream.Stream;
 @Slf4j
 public class IncrementalRecService {
 
-    InternalRatingRepository internalRatingRepository;
-    LSHBucketRepository lshBucketRepository;
-    SimilarityCandidateRepository similarityCandidateRepository;
-    UserSimilarityRepository userSimilarityRepository;
-    RatingRepository ratingRepository;
-    MinHasher minHasher;
-    LSHService lshService;
+    private final InternalRatingRepository internalRatingRepository;
+    private final LSHBucketRepository lshBucketRepository;
+    private final SimilarityCandidateRepository similarityCandidateRepository;
+    private final UserSimilarityRepository userSimilarityRepository;
+    private final RatingRepository ratingRepository;
+    private final MinHasher minHasher;
+    private final LSHService lshService;
 
     public void processNewRating(InternalRatingEvent rating) {
         log.info("Processing new rating: {}", rating);
