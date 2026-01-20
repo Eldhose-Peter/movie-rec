@@ -7,4 +7,6 @@ public interface LSHBucketRepository extends Repository<LSHBucket, Long> {
     LSHBucket save(LSHBucket lshBucket);
     void deleteByRaterId(int raterId);
 
+
+
 }

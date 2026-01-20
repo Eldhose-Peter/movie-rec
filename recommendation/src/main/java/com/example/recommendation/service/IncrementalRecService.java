@@ -8,6 +8,7 @@ import com.example.recommendation.service.lsh.Similarity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,7 @@ public class IncrementalRecService {
     private final MinHasher minHasher;
     private final LSHService lshService;
 
+    @Transactional
     public void processNewRating(InternalRatingEvent rating) {
         log.info("Processing new rating: {}", rating);
         saveRating(rating);
@@ -70,11 +72,13 @@ public class IncrementalRecService {
 
     private void findNewBucketsForUser(Integer raterId, int[] newSignature) {
         List<LSHService.BucketEntry> bucketEntries = lshService.computeBuckets(raterId, newSignature);
-        LSHBucket bucket =  new LSHBucket(bucketEntries.getFirst().bucketId(), bucketEntries.getFirst().userId());
         log.info("Computed new buckets for user {}: {}", raterId, bucketEntries);
         // remove old buckets and save new buckets to DB
         lshBucketRepository.deleteByRaterId(raterId);
-        lshBucketRepository.save(bucket);
+        for(LSHService.BucketEntry entry : bucketEntries) {
+            LSHBucket bucket = new LSHBucket(entry.bucketId(), entry.userId());
+            lshBucketRepository.save(bucket);
+        }
 
     }
 

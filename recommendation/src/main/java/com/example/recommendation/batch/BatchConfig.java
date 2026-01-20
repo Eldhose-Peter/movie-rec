@@ -47,12 +47,12 @@ public class BatchConfig extends DefaultBatchConfiguration {
     public Step generateBucketsStep(JobRepository jobRepository,
                                     PlatformTransactionManager transactionManager,
                                     JdbcCursorItemReader<UserSignature> userSignatureReader,
-                                    ItemProcessor<UserSignature, LSHBucket> lshProcessor,
-                                    JdbcBatchItemWriter<LSHBucket> lshWriter,
+                                    ItemProcessor<UserSignature, List<LSHBucket>> lshProcessor,
+                                    ItemWriter<List<LSHBucket>> lshWriter,
                                     ChunkLoggingListener chunkListener ) {
 
         return new StepBuilder("generateBucketsStep", jobRepository)
-                .<UserSignature, LSHBucket>chunk(2000, transactionManager)
+                .<UserSignature, List<LSHBucket>>chunk(2000, transactionManager)
                 .reader(userSignatureReader)
                 .processor(lshProcessor)
                 .writer(lshWriter)
