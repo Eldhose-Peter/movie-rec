@@ -10,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -65,7 +62,7 @@ public class IncrementalRecService {
                 .collect(Collectors.toSet());
 
         int[] signature = minHasher.computeSignature(movieIds);
-        log.info("Computed new signature for user {}: {}", raterId, signature);
+        log.info("Computed new signature for user {}: {} : {}", raterId, signature,movieIds.size() );
         return signature;
 
     }
@@ -75,10 +72,14 @@ public class IncrementalRecService {
         log.info("Computed new buckets for user {}: {}", raterId, bucketEntries);
         // remove old buckets and save new buckets to DB
         lshBucketRepository.deleteByRaterId(raterId);
+        List<LSHBucket> newBuckets = new ArrayList<>();
         for(LSHService.BucketEntry entry : bucketEntries) {
-            LSHBucket bucket = new LSHBucket(entry.bucketId(), entry.userId());
-            lshBucketRepository.save(bucket);
+            newBuckets.add(new LSHBucket(entry.bucketId(), entry.userId()));
         }
+
+        // SAVE AND FLUSH: Forces the data to the DB immediately
+        lshBucketRepository.saveAll(newBuckets); // batch save is faster
+        lshBucketRepository.flush();
 
     }
 
@@ -100,14 +101,16 @@ public class IncrementalRecService {
         log.info("Found {} similarity candidates for user {}", candidates.size(), userId);
 
         // compute similarities and save to DB
-        List<ImdbRatingEvent> ratings1 = ratingRepository.findById_RaterId(userId);
+        List<InternalRatingEvent> ratings1 = internalRatingRepository.findByRaterId(userId);
 
         Map<Integer, Double> r1 = new HashMap<>();
-        for (ImdbRatingEvent r : ratings1) r1.put(r.getMovieId(), r.getRating());
+        for (InternalRatingEvent r : ratings1) r1.put(r.getMovieId(), r.getRating());
 
         for (Integer r2Id : candidates)
         {
             List<ImdbRatingEvent> ratings2 = ratingRepository.findById_RaterId(r2Id);
+
+            log.info("Computing similarity between user {} and {} with {} and {} ratings", userId, r2Id, ratings1.size(), ratings2.size());
             // compute similarity between ratings1 and ratings2
             double sim = Similarity.cosine(
                 r1,

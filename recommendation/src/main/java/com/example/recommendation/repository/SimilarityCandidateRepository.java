@@ -17,19 +17,25 @@ public class SimilarityCandidateRepository {
     }
     public void deleteSimilarityCandidatesByUserId(int userId) {
         String sql = "DELETE FROM similarity_candidate WHERE rater_id = ?";
-        jdbcTemplate.update(sql, userId);
+        int rows = jdbcTemplate.update(sql, userId);
+
+        // 3. Verify insertion
+        System.out.println("DEBUG: Deleted " + rows + " rows.");
     }
 
     public void updateSimilarityCandidatesForUser(int userId) {
         String sql = """
             INSERT INTO similarity_candidate (rater_id, other_rater_id)
-            SELECT a.rater_id, b.rater_id
+            SELECT DISTINCT a.rater_id, b.rater_id
             FROM lsh_bucket a
             JOIN lsh_bucket b 
               ON a.bucket_id = b.bucket_id 
             WHERE a.rater_id = ?
-            ON CONFLICT DO NOTHING
+            AND b.rater_id != a.rater_id
         """;
-        jdbcTemplate.update(sql, userId);
+        int rows = jdbcTemplate.update(sql, userId);
+
+        // 3. Verify insertion
+        System.out.println("DEBUG: Inserted " + rows + " rows.");
     }
 }

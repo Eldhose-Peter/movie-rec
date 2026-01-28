@@ -27,7 +27,7 @@ public class GenerateCandidatePairsTasklet implements Tasklet {
             FROM lsh_bucket a
             JOIN lsh_bucket b 
               ON a.bucket_id = b.bucket_id 
-             AND a.rater_id < b.rater_id
+             AND a.rater_id < b.rater_id    
             WHERE a.bucket_id IN (
                  SELECT bucket_id
                  FROM lsh_bucket
