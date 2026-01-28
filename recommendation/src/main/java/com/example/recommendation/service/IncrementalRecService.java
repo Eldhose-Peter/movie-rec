@@ -128,8 +128,41 @@ public class IncrementalRecService {
     private void refreshRecommendations(int userId) {
         log.info("Refreshing recommendations for user {}", userId);
         // Implementation here
-        // TODO: remove old recommendations for user from DB
-        // TODO: fetch similarities for user from DB
+
+        // fetch similarities for user from DB and compute movie weight contributions
+        List<UserSimilarity> userSimilarities = userSimilarityRepository.findByIdRaterIdOrderBySimilarityScoreDesc(userId);
+        log.info("Found {} similar users for user {}", userSimilarities.size(), userId);
+
+        List<InternalRatingEvent> userRatings = internalRatingRepository.findByRaterId(userId);
+        Set<Integer> ratedMovieIds = userRatings.stream()
+                .map(InternalRatingEvent::getMovieId)
+                .collect(Collectors.toSet());
+
+        List<MovieWeightContribution> contributions = new ArrayList<>();
+        for (UserSimilarity sim : userSimilarities) {
+            int similarUserId = sim.getId().getOtherRaterId();
+            double similarityScore = sim.getSimilarityScore();
+            List<ImdbRatingEvent> similarUserRatings = ratingRepository.findByRaterId(similarUserId);
+            for (ImdbRatingEvent rating : similarUserRatings) {
+                if (ratedMovieIds.contains(rating.getMovieId())) {
+                    continue; // skip movies already rated by the user
+                }
+
+                contributions.add(new MovieWeightContribution(
+                        userId,
+                        rating.getMovieId(),
+                        rating.getRating() * similarityScore,
+                        similarityScore
+                ));
+
+                log.info("User {} contribution from similar user {} for movie {}: weighted rating {}, weight {}",
+                        userId, similarUserId, rating.getMovieId(), rating.getRating() * similarityScore, similarityScore);
+
+            }
+        }
+        log.info("Computed {} movie weight contributions for user {}", contributions.size(), userId);
+
+        // TODO: remove old recommendations for user from DB (can we do this without downtime ?)
         // TODO: generate new recommendations and save to DB
     }
 
