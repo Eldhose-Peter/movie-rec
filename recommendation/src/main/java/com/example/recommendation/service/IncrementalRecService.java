@@ -26,6 +26,7 @@ public class IncrementalRecService {
     private final RatingRepository ratingRepository;
     private final MinHasher minHasher;
     private final LSHService lshService;
+    private final UserRecommendationRepository userRecommendationRepository;
 
     @Transactional
     public void processNewRating(InternalRatingEvent rating) {
@@ -125,45 +126,60 @@ public class IncrementalRecService {
         }
     }
 
-    private void refreshRecommendations(int userId) {
+    @Transactional
+    public void refreshRecommendations(int userId) {
         log.info("Refreshing recommendations for user {}", userId);
-        // Implementation here
 
-        // fetch similarities for user from DB and compute movie weight contributions
-        List<UserSimilarity> userSimilarities = userSimilarityRepository.findByIdRaterIdOrderBySimilarityScoreDesc(userId);
-        log.info("Found {} similar users for user {}", userSimilarities.size(), userId);
+        // 1. Fetch similar users
+        List<UserSimilarity> similarities = userSimilarityRepository.findByIdRaterIdOrderBySimilarityScoreDesc(userId);
+        log.info("Found {} similar users for user {}", similarities.size(), userId);
+        if (similarities.isEmpty()) return;
 
-        List<InternalRatingEvent> userRatings = internalRatingRepository.findByRaterId(userId);
-        Set<Integer> ratedMovieIds = userRatings.stream()
+        Map<Integer, Double> simMap = similarities.stream()
+                .collect(Collectors.toMap(s -> s.getId().getOtherRaterId(), UserSimilarity::getSimilarityScore));
+
+        // 2. Fetch target user's rated movies to exclude them
+        Set<Integer> seenMovies = internalRatingRepository.findByRaterId(userId).stream()
                 .map(InternalRatingEvent::getMovieId)
                 .collect(Collectors.toSet());
 
-        List<MovieWeightContribution> contributions = new ArrayList<>();
-        for (UserSimilarity sim : userSimilarities) {
-            int similarUserId = sim.getId().getOtherRaterId();
-            double similarityScore = sim.getSimilarityScore();
-            List<ImdbRatingEvent> similarUserRatings = ratingRepository.findByRaterId(similarUserId);
-            for (ImdbRatingEvent rating : similarUserRatings) {
-                if (ratedMovieIds.contains(rating.getMovieId())) {
-                    continue; // skip movies already rated by the user
-                }
+        // 3. Batch fetch ALL ratings from ALL similar users in one go
+        List<ImdbRatingEvent> allSimilarRatings = ratingRepository.findByRaterIds(simMap.keySet());
 
-                contributions.add(new MovieWeightContribution(
-                        userId,
-                        rating.getMovieId(),
-                        rating.getRating() * similarityScore,
-                        similarityScore
-                ));
+        // 4. Aggregate scores in-memory using a custom accumulator
+        Map<Integer, Double[]> aggregationMap = new HashMap<>(); // MovieId -> [WeightedSum, WeightSum]
 
-                log.info("User {} contribution from similar user {} for movie {}: weighted rating {}, weight {}",
-                        userId, similarUserId, rating.getMovieId(), rating.getRating() * similarityScore, similarityScore);
+        for (ImdbRatingEvent rating : allSimilarRatings) {
+            if (seenMovies.contains(rating.getMovieId())) continue;
 
-            }
+            log.info("Processing rating from user {} for movie {}: {}", rating.getRaterId(), rating.getMovieId(), rating.getRating());
+
+            double simScore = simMap.get(rating.getRaterId());
+            Double[] totals = aggregationMap.computeIfAbsent(rating.getMovieId(), k -> new Double[]{0.0, 0.0});
+
+            totals[0] += rating.getRating() * simScore; // Weighted Sum
+            totals[1] += simScore;                      // Sum of Weights
+
+            log.info("Updated aggregation for movie {}: WeightedSum={}, WeightSum={}", rating.getMovieId(), totals[0], totals[1]);
         }
-        log.info("Computed {} movie weight contributions for user {}", contributions.size(), userId);
 
-        // TODO: remove old recommendations for user from DB (can we do this without downtime ?)
-        // TODO: generate new recommendations and save to DB
+        log.info("Aggregated scores for {} candidate movies for user {}", aggregationMap.size(), userId);
+
+        // 5. Transform to recommendation entities
+        List<UserRecommendation> recommendations = aggregationMap.entrySet().stream()
+                .map(entry -> {
+                    return new UserRecommendation((long) userId, (long) entry.getKey(),entry.getValue()[0] , entry.getValue()[1]);
+                })
+                .limit(20)
+                .collect(Collectors.toList());
+
+        log.info("Generated top {} recommendations for user {}", recommendations.size(), userId);
+
+        // 6. Atomic Update
+        userRecommendationRepository.deleteByIdUserId(userId);
+        userRecommendationRepository.saveAll(recommendations);
+
+        log.info("Refreshed recommendations saved for user {}", userId);
     }
 
 }

@@ -16,4 +16,8 @@ public interface UserRecommendationRepository
 
     @Query("select r from UserRecommendation r where r.id.userId = :userId order by r.weightedSumTotal desc")
     List<UserRecommendation> findTopByUser(@Param("userId") long userId);
+
+    void deleteByIdUserId(long userId);
+
+
 }
