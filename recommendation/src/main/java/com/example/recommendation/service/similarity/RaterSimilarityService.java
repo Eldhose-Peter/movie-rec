@@ -1,7 +1,8 @@
-package com.example.recommendation.service;
+package com.example.recommendation.service.similarity;
 
 import com.example.recommendation.config.SimilarityProperties;
 import com.example.recommendation.config.SimilarityStrategyFactory;
+import com.example.recommendation.model.ImdbRatingEvent;
 import com.example.recommendation.model.SimilarItem;
 import com.example.recommendation.repository.RatingRepository;
 import com.example.recommendation.service.strategy.RaterSimilarityStrategy;
@@ -61,7 +62,7 @@ public class RaterSimilarityService {
                 currentRaterId, similarityProperties.getStrategy());
 
         // Load current rater's ratings
-        List<com.example.recommendation.model.ImdbRatingEvent> currentRatings = ratingRepository
+        List<ImdbRatingEvent> currentRatings = ratingRepository
                 .findById_RaterId(currentRaterId);
         if (currentRatings.isEmpty()) {
             log.warn("No ratings found for rater {}", currentRaterId);

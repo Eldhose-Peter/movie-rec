@@ -1,4 +1,4 @@
-package com.example.recommendation.service;
+package com.example.recommendation.service.similarity;
 
 import java.util.Map;
 

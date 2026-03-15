@@ -1,4 +1,4 @@
-package com.example.recommendation.service;
+package com.example.recommendation.service.similarity;
 
 import com.example.recommendation.model.ImdbRatingEvent;
 

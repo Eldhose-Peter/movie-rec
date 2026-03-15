@@ -1,6 +1,7 @@
 package com.example.recommendation.repository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class SimilarityCandidateRepository {
     private final JdbcTemplate jdbcTemplate;
 
@@ -19,8 +21,8 @@ public class SimilarityCandidateRepository {
         String sql = "DELETE FROM similarity_candidate WHERE rater_id = ?";
         int rows = jdbcTemplate.update(sql, userId);
 
-        // 3. Verify insertion
-        System.out.println("DEBUG: Deleted " + rows + " rows.");
+        // Verify deletion
+        log.debug("Deleted {} rows", rows);
     }
 
     public void updateSimilarityCandidatesForUser(int userId) {
@@ -28,14 +30,14 @@ public class SimilarityCandidateRepository {
             INSERT INTO similarity_candidate (rater_id, other_rater_id)
             SELECT DISTINCT a.rater_id, b.rater_id
             FROM lsh_bucket a
-            JOIN lsh_bucket b 
-              ON a.bucket_id = b.bucket_id 
+            JOIN lsh_bucket b
+              ON a.bucket_id = b.bucket_id
             WHERE a.rater_id = ?
             AND b.rater_id != a.rater_id
         """;
         int rows = jdbcTemplate.update(sql, userId);
 
-        // 3. Verify insertion
-        System.out.println("DEBUG: Inserted " + rows + " rows.");
+        // Verify insertion
+        log.debug("Inserted {} rows", rows);
     }
 }

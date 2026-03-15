@@ -3,6 +3,8 @@ package com.example.recommendation.service;
 import com.example.recommendation.model.ImdbRatingEvent;
 import com.example.recommendation.model.SimilarItem;
 import com.example.recommendation.repository.RatingRepository;
+import com.example.recommendation.service.similarity.RaterSimilarityService;
+
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

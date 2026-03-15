@@ -2,8 +2,8 @@ package com.example.recommendation.service.strategy;
 
 import com.example.recommendation.model.SimilarItem;
 import com.example.recommendation.repository.RatingRepository;
-import com.example.recommendation.service.RatingNormalizer;
-import com.example.recommendation.service.SimilarityCalculator;
+import com.example.recommendation.service.similarity.RatingNormalizer;
+import com.example.recommendation.service.similarity.SimilarityCalculator;
 import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 import java.util.stream.Collectors;

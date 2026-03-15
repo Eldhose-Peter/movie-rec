@@ -3,17 +3,19 @@ package com.example.recommendation.consumer;
 import com.example.recommendation.config.RabbitConfig;
 import com.example.recommendation.model.InternalRatingEvent;
 import com.example.recommendation.model.RatingDTO;
-import com.example.recommendation.repository.InternalRatingRepository;
-import com.example.recommendation.service.IncrementalRecService;
+import com.example.recommendation.service.IncrementalRecommendationOrchestrator;
+
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RatingEventListener {
 
-    private final IncrementalRecService recommendationService;
+    private final IncrementalRecommendationOrchestrator recommendationService;
 
     @RabbitListener(queues = RabbitConfig.QUEUE_NAME)
     public void handleRatingEvent(RatingDTO message) {
@@ -22,10 +24,9 @@ public class RatingEventListener {
         InternalRatingEvent event = new InternalRatingEvent(
                 message.getRaterId(),
                 message.getMovieId(),
-                message.getRating()
-        );
+                message.getRating());
 
-        System.out.println("Processing rating from User: " + event.getRaterId());
+        log.info("Processing rating from user {}", event.getRaterId());
 
         // hand off to orchestrator to do incremental steps
         recommendationService.processNewRating(event);

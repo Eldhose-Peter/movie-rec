@@ -1,5 +1,6 @@
 package com.example.recommendation.batch.step3;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -8,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class GenerateCandidatePairsTasklet implements Tasklet {
 
     private final JdbcTemplate jdbcTemplate;
@@ -25,20 +27,20 @@ public class GenerateCandidatePairsTasklet implements Tasklet {
             INSERT INTO similarity_candidate (rater_id, other_rater_id)
             SELECT a.rater_id, b.rater_id
             FROM lsh_bucket a
-            JOIN lsh_bucket b 
-              ON a.bucket_id = b.bucket_id 
-             AND a.rater_id < b.rater_id    
+            JOIN lsh_bucket b
+              ON a.bucket_id = b.bucket_id
+             AND a.rater_id < b.rater_id
             WHERE a.bucket_id IN (
                  SELECT bucket_id
                  FROM lsh_bucket
                  GROUP BY bucket_id
-                         HAVING COUNT(*) <= 500  
+                         HAVING COUNT(*) <= 500
              )
             ON CONFLICT DO NOTHING
         """;
 
         int inserted = jdbcTemplate.update(sql);
-        System.out.println("✅ Inserted " + inserted + " candidate pairs into similarity_candidate.");
+        log.info("Inserted {} candidate pairs into similarity_candidate", inserted);
 
         return RepeatStatus.FINISHED;
     }
