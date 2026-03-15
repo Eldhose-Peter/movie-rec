@@ -1,105 +1,98 @@
 package com.example.recommendation.service;
 
-import com.example.recommendation.model.ImdbRatingEvent;
+import com.example.recommendation.config.SimilarityProperties;
+import com.example.recommendation.config.SimilarityStrategyFactory;
 import com.example.recommendation.model.SimilarItem;
 import com.example.recommendation.repository.RatingRepository;
+import com.example.recommendation.service.strategy.RaterSimilarityStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
-/*
-    Scalability issues with this approach
-
-    Assume :
-        - 138k unique raters
-        - average ratings per user is 200
-
-    1. DB overlaod
-        - 138k requests
-        - possible timeouts
-        - parallel processing of DB requests leds to - thread starvation & connection pool starvation
-
-    2. Memory consumtion
-        - Memory per rating ~ 50 bytes
-        - Memory per otherRatingsMap = 200 * 50 = 10 KB
-        - If thread pool uses 100 threads, it could load 100 other raters’ ratings simultaneously → ~1 MB just for map
-
-    3. Latency
-        - 2 DB queries per rater pair (current rater + other rater)
-        - Even if each query takes 10ms, for 138k raters:
-        - 138k * 10ms ≈ 23 minutes!
-
-    4. CPU Intensive
-        - Sorting 138k elements in memory adds additional CPU overhead.
-
+/**
+ * Service for computing rater-to-rater similarity.
+ * Uses the Strategy Pattern to support different data fetching approaches.
+ *
+ * Strategies available:
+ * - multi_query: Per-rater DB queries
+ * - load_all: Load all ratings in memory at once
+ * - stream_batch_count: Stream with batch by count
+ * - stream_batch_rater: Stream with batch by rater (DEFAULT)
+ * - offset_limit: OFFSET/LIMIT pagination
+ * - lsh_approximate: LSH-based approximate similarity
+ *
+ * Configure via: similarity.strategy property in application.properties
  */
-
-
 @Slf4j
 @Service
 public class RaterSimilarityService {
 
     private final RatingRepository ratingRepository;
+    private final SimilarityStrategyFactory strategyFactory;
+    private final SimilarityProperties similarityProperties;
 
-    RaterSimilarityService(RatingRepository ratingRepository){
+    public RaterSimilarityService(RatingRepository ratingRepository,
+            SimilarityStrategyFactory strategyFactory,
+            SimilarityProperties similarityProperties) {
         this.ratingRepository = ratingRepository;
+        this.strategyFactory = strategyFactory;
+        this.similarityProperties = similarityProperties;
+        log.info("RaterSimilarityService initialized with strategy: {}",
+                similarityProperties.getStrategy());
     }
 
-    public List<SimilarItem> getSimilarRaters(Integer currentRaterId){
-        return this.calculateSimilarRaters(currentRaterId);
-    }
-
-    private List<SimilarItem> calculateSimilarRaters(Integer currentRaterId){
-        log.info("Starting calculation for similarRaters");
-        List<Integer> raterIds = this.ratingRepository.getUniqueRaterIds();
-
-        log.info("Recieved" + raterIds.size() + "unique rater Ids from DB");
-
-        List<SimilarItem> similarRaters = new ArrayList<>();
-
-        similarRaters = raterIds
-                .parallelStream()
-                .filter(otherRaterId -> !Objects.equals(otherRaterId, currentRaterId))
-                .map(otherRaterId -> {
-                    Double value = this.dotProduct(currentRaterId, otherRaterId);
-                    return new SimilarItem(otherRaterId, (double) value);
-                })
-                .sorted()
-                .toList();
-
-        return similarRaters;
-    }
-
-    private Double dotProduct(Integer curRater, Integer otherRater) {
-        log.info("Calculating dotProduct for" + curRater + " x " + otherRater);
-        // Fetch ratings from repository
-        List<ImdbRatingEvent> curUserRatings = ratingRepository.findById_RaterId(curRater);
-        List<ImdbRatingEvent> otherUserRatings = ratingRepository.findById_RaterId(otherRater);
-
-        log.info("current user ratings : "+ curUserRatings.size());
-        log.info("other user ratings : "+ otherUserRatings.size());
-
-        // Map movieId -> rating for efficient lookup
-        Map<Integer, Double> otherRatingsMap = otherUserRatings.stream()
-                .collect(Collectors.toMap(ImdbRatingEvent::getMovieId, ImdbRatingEvent::getRating));
-
-        Double dotProduct = 0.0;
-
-        for (ImdbRatingEvent rating : curUserRatings) {
-            Double curRating = rating.getRating();
-            Double otherRating = otherRatingsMap.get(rating.getMovieId());
-
-            if (otherRating != null) {
-                // translate rating from 0 to 10 scale to -5 to 5 scale
-                curRating -= 5;
-                otherRating -= 5;
-
-                dotProduct += curRating * otherRating;
-            }
+    /**
+     * Get all similar raters for a given rater.
+     * Returns similarities sorted by score (highest first).
+     *
+     * @param currentRaterId the rater to find similarities for
+     * @return list of similar items (rater IDs with similarity scores)
+     */
+    public List<SimilarItem> getSimilarRaters(Integer currentRaterId) {
+        if (currentRaterId == null) {
+            log.warn("currentRaterId is null");
+            return Collections.emptyList();
         }
 
-        return dotProduct;
+        log.info("Computing similar raters for rater {} using strategy: {}",
+                currentRaterId, similarityProperties.getStrategy());
+
+        // Load current rater's ratings
+        List<com.example.recommendation.model.ImdbRatingEvent> currentRatings = ratingRepository
+                .findById_RaterId(currentRaterId);
+        if (currentRatings.isEmpty()) {
+            log.warn("No ratings found for rater {}", currentRaterId);
+            return Collections.emptyList();
+        }
+
+        // Normalize ratings
+        Map<Integer, Double> normalizedRatings = RatingNormalizer.normalize(currentRatings);
+
+        // Select strategy and compute similarities
+        RaterSimilarityStrategy strategy = strategyFactory.getStrategy(
+                similarityProperties.getStrategy());
+
+        List<SimilarItem> similarities = strategy.compute(
+                currentRaterId,
+                normalizedRatings,
+                ratingRepository);
+
+        log.info("Computed {} similar raters for rater {}", similarities.size(), currentRaterId);
+        return similarities;
+    }
+
+    /**
+     * Get top-N similar raters for a given rater.
+     * Alias for getSimilarRaters() - actual top-N filtering is done by the
+     * strategy.
+     *
+     * @param currentRaterId the rater to find similarities for
+     * @return list of similar items (rater IDs with similarity scores)
+     */
+    public List<SimilarItem> getTopNSimilarRaters(Integer currentRaterId) {
+        return this.getSimilarRaters(currentRaterId);
     }
 }
