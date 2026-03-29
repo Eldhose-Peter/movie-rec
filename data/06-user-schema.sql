@@ -22,5 +22,5 @@ CREATE TABLE internal_ratings (
     PRIMARY KEY (rater_id, movie_id)
 );
 
-ALTER TABLE ratings
-ADD CONSTRAINT ratings_rating_check CHECK (rating >= 0 AND rating <= 10); 
+ALTER TABLE internal_ratings
+ADD CONSTRAINT internal_ratings_rating_check CHECK (rating >= 0 AND rating <= 10); 
