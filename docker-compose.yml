@@ -19,7 +19,6 @@ services:
 
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter
-    restart: always
     environment:
       DATA_SOURCE_NAME: "postgresql://postgres:postgres@postgres:5432/recommendation_db?sslmode=disable"
     depends_on:
@@ -30,7 +29,6 @@ services:
 
   redis:
     image: redis:latest
-    restart: always
     volumes:
       - redis_data:/data
     healthcheck:
@@ -43,7 +41,6 @@ services:
 
   redis-exporter:
     image: oliver006/redis_exporter
-    restart: always
     networks:
       - app-net
     environment:
@@ -69,7 +66,6 @@ services:
     build:
       context: ./recommendation
       dockerfile: Dockerfile
-    restart: always
     depends_on:
       postgres:
         condition: service_healthy
@@ -91,7 +87,6 @@ services:
     build:
       context: ./movie-service
       dockerfile: Dockerfile
-    restart: always
     depends_on:
       postgres:
         condition: service_healthy
@@ -112,7 +107,6 @@ services:
     build:
       context: ./user-service
       dockerfile: Dockerfile
-    restart: always
     depends_on:
       postgres:
         condition: service_healthy
@@ -159,7 +153,6 @@ services:
 
   nginx:
     image: nginx:alpine
-    restart: always
     ports:
       - "${NGINX_PORT}:80" # Dynamic port mapping
     volumes:
