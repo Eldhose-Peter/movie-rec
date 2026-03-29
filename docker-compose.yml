@@ -15,6 +15,8 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+    networks:
+      - app-net
 
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter
@@ -25,6 +27,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    networks:
+      - app-net
 
   redis:
     image: redis:latest
@@ -37,11 +41,15 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-net
 
   redis-exporter:
     image: oliver006/redis_exporter
     container_name: redis-exporter
     restart: always
+    networks:
+      - app-net
     environment:
       - REDIS_ADDR=redis:6379
     depends_on:
@@ -59,6 +67,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    networks:
+      - app-net
 
   recommendation-service:
     build:
@@ -80,6 +90,8 @@ services:
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: guest
       SPRING_RABBITMQ_PASSWORD: guest
+    networks:
+      - app-net
 
   movie-service:
     build:
@@ -100,6 +112,8 @@ services:
       GRPC_CLIENT_RECOMMENDATION_ADDRESS: static://recommendation-service:9090
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
+    networks:
+      - app-net
 
   user-service:
     build:
@@ -122,6 +136,8 @@ services:
       JWT_SECRET: your_jwt_secret_key
       FRONTEND_URL: http://localhost:4200
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    networks:
+      - app-net
 
   prometheus:
     image: prom/prometheus
@@ -132,6 +148,8 @@ services:
       - movie-service
       - recommendation-service
       - postgres-exporter
+    networks:
+      - app-net
 
   grafana:
     image: grafana/grafana
@@ -146,6 +164,8 @@ services:
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/dashboards:/var/lib/grafana/dashboards
+    networks:
+      - app-net
 
   nginx:
     image: nginx:alpine
@@ -167,7 +187,13 @@ services:
       interval: 15s
       timeout: 5s
       retries: 3
+    networks:
+      - app-net
 
 volumes:
   pgdata:
   redis_data:
+
+networks:
+  app-net:
+    driver: bridge
