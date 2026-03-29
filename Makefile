@@ -43,7 +43,7 @@ fresh_start:
 	rm -rf pgdata
 	rm -rf db-init
 	mkdir -p db-init
-	mv data/*.sql db-init/
+	cp data/*.sql db-init/
 	unzip -o data/data.zip -d db-init/
 	$(COMPOSE) up -d --build
 
