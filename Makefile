@@ -13,7 +13,7 @@ endif
 # Docker Compose command shorthand
 COMPOSE := docker-compose -p $(PROJECT_NAME) --env-file $(ENV_FILE)
 
-.PHONY: up down restart build logs ps
+.PHONY: up down restart build logs ps fresh_start deploy
 
 up:
 	@echo "Starting $(ENV) environment..."
@@ -36,6 +36,15 @@ logs:
 
 ps:
 	$(COMPOSE) ps
+
+fresh_start: 
+	@echo "Performing a fresh start for $(ENV) environment..."
+	$(COMPOSE) down -v
+	mkdir -p db-init
+	mv data/*.sql db-init/
+	unzip -o data/data.zip -d db-init/
+	$(COMPOSE) up -d --build
+
 
 # Deployment command for CI/CD
 deploy:
