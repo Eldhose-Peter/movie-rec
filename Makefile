@@ -40,9 +40,11 @@ ps:
 fresh_start: 
 	@echo "Performing a fresh start for $(ENV) environment..."
 	$(COMPOSE) down -v
+	rm -rf pgdata
+	rm -rf db-init
 	mkdir -p db-init
-	mv ./data/*.sql db-init/
-	unzip -o ./data/data.zip -d db-init/
+	mv data/*.sql db-init/
+	unzip -o data/data.zip -d db-init/
 	$(COMPOSE) up -d --build
 
 
