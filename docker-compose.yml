@@ -1,6 +1,5 @@
 services:
   postgres:
-    container_name: movie-postgres-db
     image: postgres:latest
     hostname: postgres
     environment:
@@ -15,21 +14,21 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+    networks:
+      - app-net
 
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter
-    container_name: postgres-exporter
-    restart: always
     environment:
       DATA_SOURCE_NAME: "postgresql://postgres:postgres@postgres:5432/recommendation_db?sslmode=disable"
     depends_on:
       postgres:
         condition: service_healthy
+    networks:
+      - app-net
 
   redis:
     image: redis:latest
-    container_name: redis
-    restart: always
     volumes:
       - redis_data:/data
     healthcheck:
@@ -37,11 +36,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-net
 
   redis-exporter:
     image: oliver006/redis_exporter
-    container_name: redis-exporter
-    restart: always
+    networks:
+      - app-net
     environment:
       - REDIS_ADDR=redis:6379
     depends_on:
@@ -50,7 +51,6 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management
-    container_name: rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
@@ -59,13 +59,13 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    networks:
+      - app-net
 
   recommendation-service:
     build:
       context: ./recommendation
       dockerfile: Dockerfile
-    container_name: spring-recommendation-app
-    restart: always
     depends_on:
       postgres:
         condition: service_healthy
@@ -80,13 +80,13 @@ services:
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: guest
       SPRING_RABBITMQ_PASSWORD: guest
+    networks:
+      - app-net
 
   movie-service:
     build:
       context: ./movie-service
       dockerfile: Dockerfile
-    container_name: spring-movie-app
-    restart: always
     depends_on:
       postgres:
         condition: service_healthy
@@ -100,13 +100,13 @@ services:
       GRPC_CLIENT_RECOMMENDATION_ADDRESS: static://recommendation-service:9090
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
+    networks:
+      - app-net
 
   user-service:
     build:
       context: ./user-service
       dockerfile: Dockerfile
-    container_name: user-service
-    restart: always
     depends_on:
       postgres:
         condition: service_healthy
@@ -122,20 +122,22 @@ services:
       JWT_SECRET: your_jwt_secret_key
       FRONTEND_URL: http://localhost:4200
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    networks:
+      - app-net
 
   prometheus:
     image: prom/prometheus
-    container_name: prometheus
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     depends_on:
       - movie-service
       - recommendation-service
       - postgres-exporter
+    networks:
+      - app-net
 
   grafana:
     image: grafana/grafana
-    container_name: grafana
     depends_on:
       - prometheus
     environment:
@@ -143,16 +145,17 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s/grafana/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
+      - GF_LOG_LEVEL=warn
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/dashboards:/var/lib/grafana/dashboards
+    networks:
+      - app-net
 
   nginx:
     image: nginx:alpine
-    container_name: nginx-gateway
-    restart: always
     ports:
-      - "80:80"
+      - "${NGINX_PORT}:80" # Dynamic port mapping
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
@@ -167,7 +170,13 @@ services:
       interval: 15s
       timeout: 5s
       retries: 3
+    networks:
+      - app-net
 
 volumes:
   pgdata:
   redis_data:
+
+networks:
+  app-net:
+    driver: bridge
