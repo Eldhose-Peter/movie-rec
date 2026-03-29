@@ -44,7 +44,7 @@ fresh_start:
 	rm -rf db-init
 	mkdir -p db-init
 	cp data/*.sql db-init/
-	unzip -o data/data.zip -d db-init/
+	unzip -o data/data-set.zip -d db-init/
 	$(COMPOSE) up -d --build
 
 
