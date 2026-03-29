@@ -77,9 +77,8 @@ services:
       dockerfile: Dockerfile
     container_name: spring-recommendation-app
     restart: always
-    expose:
-      - "8080"
-      - "9090"
+    ports:
+      - "8080:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -94,8 +93,6 @@ services:
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: guest
       SPRING_RABBITMQ_PASSWORD: guest
-    networks:
-      - movie-network
 
   movie-service:
     build:
@@ -103,15 +100,13 @@ services:
       dockerfile: Dockerfile
     container_name: spring-movie-app
     restart: always
-    expose:
-      - "8080"
+    ports:
+      - "8081:8080"
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
-      recommendation-service:
-        condition: service_started
     environment:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/movie_db
@@ -120,8 +115,6 @@ services:
       GRPC_CLIENT_RECOMMENDATION_ADDRESS: static://recommendation-service:9090
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
-    networks:
-      - movie-network
 
   user-service:
     build:
@@ -129,8 +122,8 @@ services:
       dockerfile: Dockerfile
     container_name: user-service
     restart: always
-    expose:
-      - "3000"
+    ports:
+      - "8082:3000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -146,63 +139,24 @@ services:
       JWT_SECRET: your_jwt_secret_key
       FRONTEND_URL: http://localhost:4200
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
-    networks:
-      - movie-network
-
-  nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    container_name: nginx-gateway
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      # Uncomment to add SSL certificates
-      # - ./certs:/etc/nginx/certs:ro
-    depends_on:
-      - recommendation-service
-      - movie-service
-      - user-service
-      - prometheus
-      - grafana
-    networks:
-      - movie-network
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--quiet",
-          "--tries=1",
-          "--spider",
-          "http://localhost/health",
-        ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
   prometheus:
     image: prom/prometheus
     container_name: prometheus
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    expose:
-      - "9090"
+    ports:
+      - "9090:9090"
     depends_on:
       - movie-service
       - recommendation-service
       - postgres-exporter
-    networks:
-      - movie-network
 
   grafana:
     image: grafana/grafana
     container_name: grafana
-    expose:
-      - "3000"
+    ports:
+      - "3000:3000"
     depends_on:
       - prometheus
     environment:
@@ -211,13 +165,28 @@ services:
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/dashboards:/var/lib/grafana/dashboards
-    networks:
-      - movie-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-gateway
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - recommendation-service
+      - movie-service
+      - user-service
+      - grafana
+      - prometheus
+      - rabbitmq
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
 
 volumes:
   pgdata:
   redis_data:
-
-networks:
-  movie-network:
-    driver: bridge
