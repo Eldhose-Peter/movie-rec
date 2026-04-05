@@ -2,6 +2,8 @@ services:
   postgres:
     image: postgres:latest
     hostname: postgres
+    ports:
+      - "5432:5432" # Can be used for local development, but should be removed in production
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
