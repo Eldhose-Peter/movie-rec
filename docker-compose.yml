@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - ./db-init:/docker-entrypoint-initdb.d
-      - pgdata:/var/lib/postgresql/18/docker
+      - ./postgres_data:/var/lib/postgresql/18/docker
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -32,7 +32,7 @@ services:
   redis:
     image: redis:8.4-alpine
     volumes:
-      - redis_data:/data
+      - ./redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -174,10 +174,6 @@ services:
       retries: 3
     networks:
       - app-net
-
-volumes:
-  pgdata:
-  redis_data:
 
 networks:
   app-net:
