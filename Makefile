@@ -40,7 +40,8 @@ ps:
 fresh_start: 
 	@echo "Performing a fresh start for $(ENV) environment..."
 	$(COMPOSE) down -v
-	rm -rf pgdata
+	rm -rf postgres_data
+	rm -rf redis_data
 	rm -rf db-init
 	mkdir -p db-init
 	cp data/*.sql db-init/
